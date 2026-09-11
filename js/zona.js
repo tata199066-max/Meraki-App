@@ -176,7 +176,7 @@ async function renderPrincipal() {
         <div class="paso-contador">Paso ${pasoIndice + 1} de ${pasosActuales.length}</div>
         <div class="diagrama-unico">
           <div class="diagrama-titulo">${zona.nombre}</div>
-          ${generarDiagramaCompleto(zona.id, tipoMovimiento)}
+          ${generarDiagramaCompleto(zona.id, nivel.numero, tipoMovimiento)}
         </div>
         <h3>${paso.titulo}</h3>
         <p>${paso.detalle}</p>

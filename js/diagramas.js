@@ -1,9 +1,14 @@
 /*
-  Meraki App — Diagrama ilustrado único por paso: una sola ilustración con
-  la silueta base (imagen real, sin marca de agua, guardada en /images),
-  recoloreada por código a un tono normal (no negro), con la zona resaltada
-  como una región y una flecha muy delgada que recorre el trayecto real de
-  la técnica (de dónde a dónde), no solo un punto.
+  Meraki App — Diagrama ilustrado por nivel: una foto real del músculo
+  trabajado (guardada en /images, generada sin marca de agua, tono cálido
+  y humano) con una región y una flecha de trayecto dibujadas por código
+  (SVG), nunca generadas por IA.
+
+  Cada zona tiene varios "puntos" reales (uno por técnica distinta descrita
+  en zonas.js/pasos_zona), y cada nivel usa el punto que le corresponde —
+  así el dibujo cambia según el nivel en vez de repetir siempre la misma
+  flecha. El Nivel 5 ("rutina completa") combina todos los puntos distintos
+  de la zona en un solo dibujo, porque ese nivel junta todas las técnicas.
 
   El nombre de la zona va como título AFUERA del dibujo (en HTML), nunca
   como texto encima de las líneas.
@@ -12,27 +17,7 @@
 const VERDE = '#8BA886';
 const NEGRO = '#1A1A1A';
 const BEIGE = '#E8E0D5';
-const CUERPO_COLOR = '#9C9186'; // tono normal/suave para la silueta (no negro)
 
-const ZONAS_CABEZA_CUELLO = ['trapecio', 'suboccipital', 'temporal', 'mandibula'];
-
-/* Trayecto de cada zona de cabeza/cuello: de dónde (x1,y1) a dónde (x2,y2)
-   va la técnica, en el sistema de coordenadas del recorte (viewBox 0 0 150 200)
-   sobre la mitad derecha de la imagen base. */
-const TRAYECTO_CABEZA_CUELLO = {
-  temporal: { x1: 122, y1: 68, x2: 103, y2: 48 },
-  mandibula: { x1: 112, y1: 108, x2: 92, y2: 92 },
-  suboccipital: { x1: 60, y1: 126, x2: 78, y2: 112 },
-  trapecio: { x1: 133, y1: 150, x2: 96, y2: 128 },
-};
-
-/* ---------- Imagen base ya recoloreada (archivo real, no en tiempo real) ----------
-   Antes esto se recoloreaba con canvas cada vez que se abría la pantalla, pero
-   eso falla si la persona abre el archivo con doble clic (sin servidor) — el
-   navegador bloquea leer los píxeles de una imagen local por seguridad, y la
-   silueta se quedaba negra. Por eso ahora se usa un archivo PNG ya recoloreado
-   una sola vez y guardado en /images, que funciona igual abriendo el archivo
-   directo o desde un servidor. */
 function precargarImagenesDiagrama() {
   return Promise.resolve();
 }
@@ -63,7 +48,7 @@ function trayectoOndulado(x1, y1, x2, y2, amplitud) {
     · recta fina -> presionar hacia el punto
 */
 function dibujarFlechaTrayecto(x1, y1, x2, y2, tipoMovimiento) {
-  const idFlecha = 'flecha-' + Math.round(x1) + '-' + Math.round(y1) + '-' + Math.round(x2) + '-' + tipoMovimiento;
+  const idFlecha = 'flecha-' + Math.round(x1) + '-' + Math.round(y1) + '-' + Math.round(x2) + '-' + Math.round(y2) + '-' + tipoMovimiento;
 
   const defs = `
     <marker id="${idFlecha}" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
@@ -86,181 +71,212 @@ function dibujarFlechaTrayecto(x1, y1, x2, y2, tipoMovimiento) {
   return { defs, forma };
 }
 
-/* Región (óvalo) que resalta toda la zona trabajada, no solo un punto,
-   calculada a partir del trayecto de la técnica. */
-function dibujarRegion(x1, y1, x2, y2) {
+/* Región (óvalo) que resalta la zona trabajada por ese punto en concreto. */
+function dibujarRegion(x1, y1, x2, y2, opacidad) {
   const cx = (x1 + x2) / 2, cy = (y1 + y2) / 2;
   const largo = distancia(x1, y1, x2, y2);
   const angulo = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
   const rx = largo / 2 + 12, ry = 13;
-  return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" transform="rotate(${angulo} ${cx} ${cy})" fill="${VERDE}" fill-opacity="0.28" stroke="${VERDE}" stroke-width="1.3" stroke-opacity="0.7" />`;
-}
-
-/* Diagrama para zonas de cabeza/cuello: imagen real recortada a la cabeza
-   de la derecha, recoloreada a un tono normal, con la región y la flecha
-   de trayecto encima, en un SVG transparente. */
-function generarDiagramaCabezaCuello(zonaId, tipoMovimiento) {
-  const t = TRAYECTO_CABEZA_CUELLO[zonaId];
-  const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, tipoMovimiento || 'presionar');
-  const region = dibujarRegion(t.x1, t.y1, t.x2, t.y2);
-
-  return `
-    <div class="diagrama-marco" style="aspect-ratio: 3 / 4;">
-      <div class="diagrama-imagen-base" style="background-image:url('images/base-cabeza-hombros-normal.png'); background-size:200% 100%; background-position:100% 0%;"></div>
-      <svg class="diagrama-overlay" viewBox="0 0 150 200" preserveAspectRatio="none" role="img" aria-label="Diagrama de cabeza y cuello con la zona y el trayecto de la técnica">
-        <defs>${flecha.defs}</defs>
-        ${region}
-        ${flecha.forma}
-      </svg>
-    </div>
-  `;
-}
-
-/* ---------- Resto del cuerpo: recorte real sobre la foto de cuerpo completo ----------
-   La imagen base-cuerpo-completo-normal.png tiene dos figuras de pie, brazos
-   abiertos: la de la izquierda de frente, la de la derecha de espalda. Para
-   cada zona se recorta (con matemática de background-size/position) solo la
-   parte del cuerpo relevante, en vez de mostrar el cuerpo completo. */
-
-const IMG_CUERPO = 'images/base-cuerpo-completo-normal.png';
-
-const FIGURA_FRENTE = { x0: 0.010, x1: 0.479 };
-const FIGURA_ESPALDA = { x0: 0.520, x1: 0.989 };
-
-/* Para cada zona: en qué figura cae (frente/espalda), qué recorte local
-   (0 a 1, dentro de esa figura) se muestra, y el trayecto de la técnica en
-   coordenadas 0-100 dentro de ese recorte ya mostrado. */
-const ZONA_CUERPO = {
-  hombro: { figura: FIGURA_FRENTE, local: { x0: 0.56, x1: 0.84, y0: 0.15, y1: 0.27 }, t: { x1: 30, y1: 80, x2: 70, y2: 25 } },
-  pectorales: { figura: FIGURA_FRENTE, local: { x0: 0.28, x1: 0.72, y0: 0.19, y1: 0.33 }, t: { x1: 78, y1: 55, x2: 25, y2: 45 } },
-  abdomen: { figura: FIGURA_FRENTE, local: { x0: 0.30, x1: 0.70, y0: 0.33, y1: 0.49 }, t: { x1: 30, y1: 70, x2: 70, y2: 35 } },
-  antebrazo: { figura: FIGURA_FRENTE, local: { x0: 0.74, x1: 1.0, y0: 0.30, y1: 0.49 }, t: { x1: 25, y1: 10, x2: 75, y2: 90 } },
-  mano_muneca: { figura: FIGURA_FRENTE, local: { x0: 0.84, x1: 1.0, y0: 0.44, y1: 0.58 }, t: { x1: 30, y1: 20, x2: 60, y2: 85 } },
-  pantorrillas: { figura: FIGURA_FRENTE, local: { x0: 0.30, x1: 0.70, y0: 0.76, y1: 0.92 }, t: { x1: 50, y1: 88, x2: 50, y2: 12 } },
-  planta_pie: { figura: FIGURA_FRENTE, local: { x0: 0.15, x1: 0.85, y0: 0.90, y1: 0.965 }, t: { x1: 15, y1: 50, x2: 85, y2: 50 } },
-  omoplatos: { figura: FIGURA_ESPALDA, local: { x0: 0.22, x1: 0.52, y0: 0.20, y1: 0.33 }, t: { x1: 25, y1: 80, x2: 75, y2: 25 } },
-  dorsal: { figura: FIGURA_ESPALDA, local: { x0: 0.28, x1: 0.72, y0: 0.30, y1: 0.44 }, t: { x1: 25, y1: 75, x2: 75, y2: 30 } },
-  lumbar: { figura: FIGURA_ESPALDA, local: { x0: 0.30, x1: 0.70, y0: 0.43, y1: 0.57 }, t: { x1: 50, y1: 88, x2: 50, y2: 15 } },
-  piriforme: { figura: FIGURA_ESPALDA, local: { x0: 0.30, x1: 0.70, y0: 0.55, y1: 0.67 }, t: { x1: 30, y1: 80, x2: 70, y2: 25 } },
-};
-
-/* Convierte un recorte (fracciones 0-1 sobre la imagen completa) en los
-   valores de background-size / background-position que muestran justo esa
-   ventana dentro del contenedor. */
-function calcularRecorte(x0, x1, y0, y1) {
-  const anchoRecorte = x1 - x0;
-  const altoRecorte = y1 - y0;
-  const sizeX = 100 / anchoRecorte;
-  const sizeY = 100 / altoRecorte;
-  const posX = (x0 / (1 - anchoRecorte)) * 100;
-  const posY = (y0 / (1 - altoRecorte)) * 100;
-  return { sizeX, sizeY, posX, posY };
-}
-
-function generarDiagramaCuerpo(zonaId, tipoMovimiento) {
-  const cfg = ZONA_CUERPO[zonaId];
-  if (!cfg) {
-    return `<div class="diagrama-marco" style="aspect-ratio: 1 / 1;"></div>`;
-  }
-
-  const absX0 = cfg.figura.x0 + cfg.local.x0 * (cfg.figura.x1 - cfg.figura.x0);
-  const absX1 = cfg.figura.x0 + cfg.local.x1 * (cfg.figura.x1 - cfg.figura.x0);
-  const absY0 = cfg.local.y0;
-  const absY1 = cfg.local.y1;
-  const r = calcularRecorte(absX0, absX1, absY0, absY1);
-
-  const t = cfg.t;
-  const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, tipoMovimiento || 'presionar');
-  const region = dibujarRegion(t.x1, t.y1, t.x2, t.y2);
-
-  return `
-    <div class="diagrama-marco" style="aspect-ratio: 1 / 1;">
-      <div class="diagrama-imagen-base" style="background-image:url('${IMG_CUERPO}'); background-size:${r.sizeX}% ${r.sizeY}%; background-position:${r.posX}% ${r.posY}%;"></div>
-      <svg class="diagrama-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="Diagrama del cuerpo con la zona y el trayecto de la técnica">
-        <defs>${flecha.defs}</defs>
-        ${region}
-        ${flecha.forma}
-      </svg>
-    </div>
-  `;
+  const op = opacidad ?? 0.28;
+  return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" transform="rotate(${angulo} ${cx} ${cy})" fill="${VERDE}" fill-opacity="${op}" stroke="${VERDE}" stroke-width="1.3" stroke-opacity="0.7" />`;
 }
 
 /* ---------- Fotos con el músculo trabajado resaltado (una por zona) ----------
-   Cada zona tiene su propia foto real (generada, sin marca de agua, tono
-   cálido y humano) donde el músculo que se trabaja se ve suavemente
-   resaltado bajo la piel. Encima se dibuja la misma región + flecha de
-   siempre, en el sistema de coordenadas compartido 0-150 / 0-206
-   (proporcional a las fotos, que son todas de 864x1184). */
-/* Cada trayecto (x1,y1 -> x2,y2) se releyó contra el paso a paso real del
-   Nivel 1 de esa zona en zonas.js, para que la flecha vaya en la dirección
-   exacta que describe la técnica (ej. "del talón hacia los dedos", "de la
-   muñeca hacia el codo", "siempre hacia arriba") y termine sobre el punto
-   de presión/dolor de referencia que se menciona en el texto. */
+   Cada zona tiene su propia foto real donde el músculo que se trabaja se ve
+   suavemente resaltado bajo la piel, en el sistema de coordenadas 0-150 /
+   0-206 (proporcional a las fotos, todas de 864x1184).
+
+   "puntos" son los lugares reales y distintos que describe la técnica de
+   esa zona (releídos contra zonas.js / pasos_zona para que cada uno caiga
+   exactamente donde dice el texto — ej. "borde lateral, cerca del cuello",
+   "cerca de la cresta de la cadera", "debajo del ombligo"). "nivelPunto"
+   dice qué punto usa cada nivel 1-4 (varios niveles pueden compartir punto
+   cuando la técnica es la misma zona con más tiempo/profundidad). El Nivel
+   5 (rutina completa) combina todos los puntos de la lista. */
 const ZONA_MUSCULO = {
-  // "coloca las yemas de los dedos entre el cuello y el hombro"
-  trapecio: { imagen: 'images/musculo-trapecio.png', t: { x1: 90, y1: 111, x2: 120, y2: 160 } },
-  // "el borde justo donde termina el cráneo y empieza el cuello, a los costados de la columna"
-  suboccipital: { imagen: 'images/musculo-suboccipital.png', t: { x1: 80, y1: 95, x2: 95, y2: 112 } },
-  // "desde la línea del cabello hacia adelante, hasta la esquina externa del ojo"
-  temporal: { imagen: 'images/musculo-temporal.png', t: { x1: 45, y1: 95, x2: 90, y2: 112 } },
-  // "delante de las orejas" -> "debajo del hueso de la mandíbula"
-  mandibula: { imagen: 'images/musculo-mandibula.png', t: { x1: 45, y1: 95, x2: 60, y2: 125 } },
-  // "la parte externa del hombro" ... "de arriba hacia abajo"
-  hombro: { imagen: 'images/musculo-hombro.png', t: { x1: 85, y1: 105, x2: 88, y2: 158 } },
-  // "el borde interno del omóplato"
-  omoplatos: { imagen: 'images/musculo-omoplatos.png', t: { x1: 25, y1: 80, x2: 68, y2: 172 } },
-  // "la mano por encima del hombro contrario hacia la zona alta de la espalda"
-  dorsal: { imagen: 'images/musculo-dorsal.png', t: { x1: 70, y1: 118, x2: 95, y2: 140 } },
-  // "uno a cada lado de la columna" (bilateral, a la altura lumbar)
-  lumbar: { imagen: 'images/musculo-lumbar.png', t: { x1: 43, y1: 148, x2: 95, y2: 165 } },
-  // "en el centro del glúteo"
-  piriforme: { imagen: 'images/musculo-piriforme.png', t: { x1: 65, y1: 100, x2: 70, y2: 113 } },
-  // "desde el tobillo hacia la rodilla, siempre hacia arriba"
-  pantorrillas: { imagen: 'images/musculo-pantorrillas.png', t: { x1: 90, y1: 160, x2: 70, y2: 110 } },
-  // "desde el talón hacia los dedos"
-  planta_pie: { imagen: 'images/musculo-planta-pie.png', t: { x1: 90, y1: 150, x2: 75, y2: 65 } },
-  // "desde la muñeca hasta el codo"
-  antebrazo: { imagen: 'images/musculo-antebrazo.png', t: { x1: 90, y1: 90, x2: 60, y2: 160 } },
-  // "desde el centro de la palma hacia los dedos"
-  mano_muneca: { imagen: 'images/musculo-mano-muneca.png', t: { x1: 60, y1: 135, x2: 70, y2: 95 } },
-  // "desde el esternón hacia el costado"
-  pectorales: { imagen: 'images/musculo-pectorales.png', t: { x1: 75, y1: 115, x2: 105, y2: 100 } },
-  // "en sentido de las agujas del reloj", alrededor del ombligo
-  abdomen: { imagen: 'images/musculo-abdomen.png', t: { x1: 83, y1: 83, x2: 95, y2: 108 } },
+  trapecio: {
+    imagen: 'images/musculo-trapecio.png',
+    puntos: [
+      { t: { x1: 90, y1: 111, x2: 120, y2: 160 }, tipo: 'circular' },   // "entre el cuello y el hombro"
+      { t: { x1: 100, y1: 95, x2: 112, y2: 108 }, tipo: 'presionar' },  // "borde lateral, cerca del cuello"
+      { t: { x1: 60, y1: 172, x2: 75, y2: 184 }, tipo: 'presionar' },   // "entre los omóplatos"
+      { t: { x1: 42, y1: 192, x2: 58, y2: 203 }, tipo: 'presionar' },   // "borde interno del omóplato, más bajo"
+    ],
+    nivelPunto: [0, 1, 2, 3],
+  },
+  suboccipital: {
+    imagen: 'images/musculo-suboccipital.png',
+    puntos: [
+      { t: { x1: 80, y1: 95, x2: 95, y2: 112 }, tipo: 'presionar' },    // borde óseo, base del cráneo
+      { t: { x1: 100, y1: 98, x2: 112, y2: 110 }, tipo: 'presionar' },  // punto lateral, cerca de la base del cráneo
+    ],
+    nivelPunto: [0, 0, 1, 1],
+  },
+  temporal: {
+    imagen: 'images/musculo-temporal.png',
+    puntos: [
+      { t: { x1: 45, y1: 95, x2: 90, y2: 112 }, tipo: 'circular' },     // recorrido cabello -> ojo
+      { t: { x1: 30, y1: 98, x2: 45, y2: 108 }, tipo: 'presionar' },    // punto posterior, cerca de la línea del cabello
+    ],
+    nivelPunto: [0, 0, 1, 1],
+  },
+  mandibula: {
+    imagen: 'images/musculo-mandibula.png',
+    puntos: [
+      { t: { x1: 45, y1: 95, x2: 60, y2: 125 }, tipo: 'presionar' },    // masetero superficial
+      { t: { x1: 55, y1: 120, x2: 68, y2: 140 }, tipo: 'presionar' },   // punto profundo, ángulo de la mandíbula
+    ],
+    nivelPunto: [0, 0, 1, 1],
+  },
+  hombro: {
+    imagen: 'images/musculo-hombro.png',
+    puntos: [
+      { t: { x1: 85, y1: 105, x2: 88, y2: 158 }, tipo: 'presionar' },   // fibras externas/medias
+      { t: { x1: 70, y1: 95, x2: 75, y2: 125 }, tipo: 'presionar' },    // fibras anteriores (borde delantero del hombro)
+      { t: { x1: 100, y1: 120, x2: 103, y2: 155 }, tipo: 'presionar' }, // fibras posteriores (borde trasero del hombro)
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  omoplatos: {
+    imagen: 'images/musculo-omoplatos.png',
+    puntos: [
+      { t: { x1: 25, y1: 80, x2: 68, y2: 172 }, tipo: 'presionar' },    // borde interno
+      { t: { x1: 30, y1: 60, x2: 45, y2: 75 }, tipo: 'presionar' },     // punto superior
+      { t: { x1: 35, y1: 35, x2: 48, y2: 50 }, tipo: 'presionar' },     // elevador de la escápula, hacia el cuello
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  dorsal: {
+    imagen: 'images/musculo-dorsal.png',
+    puntos: [
+      { t: { x1: 70, y1: 118, x2: 95, y2: 140 }, tipo: 'presionar' },   // zona alta general
+      { t: { x1: 105, y1: 110, x2: 118, y2: 125 }, tipo: 'presionar' }, // borde externo, cerca de la axila
+      { t: { x1: 80, y1: 150, x2: 92, y2: 162 }, tipo: 'presionar' },   // ángulo inferior del omóplato
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  lumbar: {
+    imagen: 'images/musculo-lumbar.png',
+    puntos: [
+      { t: { x1: 43, y1: 148, x2: 95, y2: 165 }, tipo: 'presionar' },   // a los lados de la columna
+      { t: { x1: 35, y1: 170, x2: 50, y2: 182 }, tipo: 'presionar' },   // cerca de la cresta de la cadera
+    ],
+    nivelPunto: [0, 0, 1, 1],
+  },
+  piriforme: {
+    imagen: 'images/musculo-piriforme.png',
+    puntos: [
+      { t: { x1: 65, y1: 100, x2: 70, y2: 113 }, tipo: 'presionar' },   // centro del glúteo
+      { t: { x1: 85, y1: 75, x2: 95, y2: 85 }, tipo: 'presionar' },     // glúteo medio, punto alto
+      { t: { x1: 85, y1: 95, x2: 95, y2: 105 }, tipo: 'presionar' },    // glúteo medio, punto medio
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  pantorrillas: {
+    imagen: 'images/musculo-pantorrillas.png',
+    puntos: [
+      { t: { x1: 90, y1: 160, x2: 70, y2: 110 }, tipo: 'deslizar' },    // ordeñe general, tobillo -> rodilla
+      { t: { x1: 55, y1: 150, x2: 50, y2: 115 }, tipo: 'presionar' },   // gastrocnemio interno
+      { t: { x1: 85, y1: 180, x2: 78, y2: 165 }, tipo: 'presionar' },   // sóleo, cerca del tendón de Aquiles
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  planta_pie: {
+    imagen: 'images/musculo-planta-pie.png',
+    puntos: [
+      { t: { x1: 90, y1: 150, x2: 75, y2: 65 }, tipo: 'deslizar' },     // talón -> dedos
+      { t: { x1: 70, y1: 110, x2: 78, y2: 100 }, tipo: 'presionar' },   // centro del arco
+      { t: { x1: 88, y1: 145, x2: 82, y2: 135 }, tipo: 'presionar' },   // combinado con la pantorrilla
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  antebrazo: {
+    imagen: 'images/musculo-antebrazo.png',
+    puntos: [
+      { t: { x1: 90, y1: 90, x2: 60, y2: 160 }, tipo: 'deslizar' },     // extensores y flexores, muñeca -> codo
+      { t: { x1: 95, y1: 75, x2: 100, y2: 90 }, tipo: 'presionar' },    // codo externo ("codo de tenista")
+      { t: { x1: 70, y1: 75, x2: 65, y2: 90 }, tipo: 'presionar' },     // codo interno ("codo de golfista")
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  mano_muneca: {
+    imagen: 'images/musculo-mano-muneca.png',
+    puntos: [
+      { t: { x1: 60, y1: 135, x2: 70, y2: 95 }, tipo: 'deslizar' },     // palma, centro -> dedos
+      { t: { x1: 45, y1: 120, x2: 50, y2: 110 }, tipo: 'presionar' },   // base del pulgar
+      { t: { x1: 65, y1: 80, x2: 75, y2: 75 }, tipo: 'presionar' },     // espacios entre los dedos, dorso de la mano
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  pectorales: {
+    imagen: 'images/musculo-pectorales.png',
+    puntos: [
+      { t: { x1: 75, y1: 115, x2: 105, y2: 100 }, tipo: 'presionar' },  // esternón -> costado
+      { t: { x1: 70, y1: 75, x2: 95, y2: 68 }, tipo: 'presionar' },     // porción clavicular
+      { t: { x1: 100, y1: 110, x2: 115, y2: 120 }, tipo: 'presionar' }, // pectoral menor, cerca de la axila
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
+  abdomen: {
+    imagen: 'images/musculo-abdomen.png',
+    puntos: [
+      { t: { x1: 83, y1: 83, x2: 95, y2: 108 }, tipo: 'circular' },     // círculos alrededor del ombligo
+      { t: { x1: 75, y1: 55, x2: 85, y2: 65 }, tipo: 'presionar' },     // debajo del esternón
+      { t: { x1: 75, y1: 115, x2: 85, y2: 125 }, tipo: 'presionar' },   // debajo del ombligo
+    ],
+    nivelPunto: [0, 0, 1, 2],
+  },
 };
 
-function generarDiagramaMusculo(zonaId, tipoMovimiento) {
+function puntoParaNivel(cfg, numeroNivel) {
+  const indice = cfg.nivelPunto[(numeroNivel || 1) - 1] ?? 0;
+  return cfg.puntos[indice];
+}
+
+function generarDiagramaMusculo(zonaId, numeroNivel, tipoMovimientoOverride) {
   const cfg = ZONA_MUSCULO[zonaId];
   if (!cfg) {
     return `<div class="diagrama-marco" style="aspect-ratio: 3 / 4;"></div>`;
   }
-  const t = cfg.t;
-  const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, tipoMovimiento || 'presionar');
-  const region = dibujarRegion(t.x1, t.y1, t.x2, t.y2);
+
+  let defs = '';
+  let capas = '';
+
+  const esRutinaCompleta = numeroNivel === 5;
+  if (esRutinaCompleta) {
+    // Rutina completa: se muestran todos los puntos distintos de la zona a la vez.
+    cfg.puntos.forEach((punto) => {
+      const t = punto.t;
+      const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, punto.tipo);
+      defs += flecha.defs;
+      capas += dibujarRegion(t.x1, t.y1, t.x2, t.y2, 0.22) + flecha.forma;
+    });
+  } else {
+    const punto = puntoParaNivel(cfg, numeroNivel);
+    const t = punto.t;
+    const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, tipoMovimientoOverride || punto.tipo);
+    defs = flecha.defs;
+    capas = dibujarRegion(t.x1, t.y1, t.x2, t.y2) + flecha.forma;
+  }
 
   return `
     <div class="diagrama-marco" style="aspect-ratio: 864 / 1184;">
       <div class="diagrama-imagen-base" style="background-image:url('${cfg.imagen}'); background-size:cover; background-position:center;"></div>
-      <svg class="diagrama-overlay" viewBox="0 0 150 206" preserveAspectRatio="none" role="img" aria-label="Diagrama con el músculo trabajado, la región y el trayecto de la técnica">
-        <defs>${flecha.defs}</defs>
-        ${region}
-        ${flecha.forma}
+      <svg class="diagrama-overlay" viewBox="0 0 150 206" preserveAspectRatio="none" role="img" aria-label="Diagrama con el músculo trabajado y el punto de la técnica de este nivel">
+        <defs>${defs}</defs>
+        ${capas}
       </svg>
     </div>
   `;
 }
 
 /*
-  Punto de entrada: elige la base correcta según la zona.
+  Punto de entrada del diagrama. `numeroNivel` (1 a 5) decide qué punto de
+  la zona se muestra; `tipoMovimiento`, cuando se pasa, fuerza la forma de
+  la flecha para el paso actual (calentamiento, círculos, sostener, etc.).
 */
-function generarDiagramaCompleto(zonaId, tipoMovimiento) {
-  if (ZONA_MUSCULO[zonaId]) {
-    return generarDiagramaMusculo(zonaId, tipoMovimiento);
-  }
-  if (ZONAS_CABEZA_CUELLO.includes(zonaId)) {
-    return generarDiagramaCabezaCuello(zonaId, tipoMovimiento);
-  }
-  return generarDiagramaCuerpo(zonaId, tipoMovimiento);
+function generarDiagramaCompleto(zonaId, numeroNivel, tipoMovimiento) {
+  return generarDiagramaMusculo(zonaId, numeroNivel, tipoMovimiento);
 }
 
 /* Determina un tipo de movimiento simple a partir del texto del paso,
