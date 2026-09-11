@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — ¡Listo!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .celebracion {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+      animation: aparecer 0.4s ease;
+    }
+    .celebracion .emoji { font-size: 56px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="celebracion">
+      <div class="emoji">🎉</div>
+      <h1>¡Listo!</h1>
+      <p class="texto-suave">Esto es lo que armamos para ti</p>
+    </div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = 'inicio.html';
+    }, 1600);
+  </script>
+</body>
+</html>

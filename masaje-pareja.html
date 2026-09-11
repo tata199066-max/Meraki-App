@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Masaje en pareja</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .info-tarjeta { margin-bottom: 12px; }
+    .info-tarjeta .etiqueta-info {
+      font-weight: 700; font-size: 13px; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--verde-oscuro); margin-bottom: 6px; display: block;
+    }
+    .info-tarjeta.evitar .etiqueta-info { color: #b3453e; }
+    .info-tarjeta.consentimiento .etiqueta-info { color: #b3453e; }
+    .candado { text-align: center; padding: 30px 10px; }
+    .candado .icono-candado { font-size: 40px; margin-bottom: 10px; }
+    .foto-tecnica {
+      width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radio);
+      margin-bottom: 14px; display: block; background: var(--beige);
+    }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='pareja.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra" id="titulo-masaje-pareja">Masaje en pareja</span>
+    </div>
+
+    <div class="contenido" id="contenido-masaje-pareja"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/pareja.js"></script>
+  <script src="js/niveles.js"></script>
+  <script src="js/bebidas.js"></script>
+  <script>
+    let usuarioMasajePareja = null;
+    const idMasajePareja = new URLSearchParams(window.location.search).get('id');
+    const masajePareja = obtenerMasajeParejaPorId(idMasajePareja);
+    const contenedorMP = document.getElementById('contenido-masaje-pareja');
+
+    function tieneAccesoMasajePareja() {
+      return usuarioMasajePareja.rol === 'admin' || usuarioMasajePareja.estado_suscripcion === 'activo';
+    }
+
+    async function renderMasajePareja() {
+      if (!masajePareja) {
+        contenedorMP.innerHTML = '<p>No encontramos este masaje.</p>';
+        return;
+      }
+
+      document.getElementById('titulo-masaje-pareja').textContent = masajePareja.nombre;
+
+      const puedeVer = !masajePareja.premium || tieneAccesoMasajePareja();
+      const etiqueta = masajePareja.premium
+        ? '<span class="etiqueta etiqueta-premium">Premium</span>'
+        : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
+
+      const encabezado = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px;">
+          <h1 style="margin-bottom:0;">${masajePareja.nombre}</h1>
+          ${etiqueta}
+        </div>
+        <p class="texto-suave" style="margin-bottom:14px;">${masajePareja.nivel} · ${masajePareja.tiempo}</p>
+        <img src="${masajePareja.imagen}" alt="${masajePareja.nombre}" class="foto-tecnica" />
+      `;
+
+      if (!puedeVer) {
+        contenedorMP.innerHTML = encabezado + `
+          <div class="tarjeta candado">
+            <div class="icono-candado">🔒</div>
+            <h3>Este masaje es Premium</h3>
+            <p class="texto-suave">Suscríbete para desbloquearlo.</p>
+            <button class="boton boton-primario" id="boton-suscribirse-mp" style="margin-top:8px;">Quiero suscribirme</button>
+          </div>
+        `;
+        document.getElementById('boton-suscribirse-mp').addEventListener('click', () => {
+          alert('La suscripción de pago todavía no está activa en esta versión de prueba. Se conecta más adelante.');
+        });
+        return;
+      }
+
+      const consentimientoHtml = masajePareja.notaConsentimiento ? `
+        <div class="tarjeta info-tarjeta consentimiento">
+          <span class="etiqueta-info">Antes de empezar</span>
+          <p style="margin-bottom:0;">${masajePareja.notaConsentimiento}</p>
+        </div>
+      ` : '';
+
+      const detalleHtml = masajePareja.detalle ? `
+        <div class="tarjeta info-tarjeta">
+          <span class="etiqueta-info">Orden de la rutina</span>
+          <p style="margin-bottom:0;">${masajePareja.detalle}</p>
+        </div>
+      ` : '';
+
+      contenedorMP.innerHTML = encabezado + consentimientoHtml + `
+        <div class="tarjeta info-tarjeta">
+          <span class="etiqueta-info">Postura de quien recibe</span>
+          <p style="margin-bottom:0;">${masajePareja.posturaRecibe}</p>
+        </div>
+        <div class="tarjeta info-tarjeta">
+          <span class="etiqueta-info">Postura de quien da</span>
+          <p style="margin-bottom:0;">${masajePareja.posturaDa}</p>
+        </div>
+        <div class="tarjeta info-tarjeta">
+          <span class="etiqueta-info">Presión recomendada</span>
+          <p style="margin-bottom:0;">${masajePareja.presion}</p>
+        </div>
+        ${detalleHtml}
+        <div class="tarjeta info-tarjeta evitar">
+          <span class="etiqueta-info">Cuándo evitarlo</span>
+          <p style="margin-bottom:0;">Aplican las mismas contraindicaciones generales de automasaje: hipertensión no controlada, embarazo de riesgo, problemas de coagulación, heridas o infecciones activas, y detenerse de inmediato si aparece dolor que se dispara, hormigueo o mareo. Consulta la sección de Seguridad y contraindicaciones ante cualquier duda.</p>
+        </div>
+        <button class="boton boton-primario" id="boton-hecho-mp">Marcar como realizado</button>
+      `;
+
+      document.getElementById('boton-hecho-mp').addEventListener('click', async () => {
+        await registrarSesionHoy(usuarioMasajePareja.id);
+        const bebida = await elegirBebida(usuarioMasajePareja.id, 'relajacion');
+        contenedorMP.innerHTML = `
+          <div class="tarjeta centrado" style="margin-top:20px;">
+            <div style="font-size:40px;">✅</div>
+            <h2>¡Listo!</h2>
+            <p class="texto-suave">Disfruten un momento de calma después de esta sesión.</p>
+          </div>
+          <div class="tarjeta tarjeta-lavanda">
+            <span class="etiqueta-info" style="color:var(--negro); font-weight:700; font-size:13px; text-transform:uppercase; display:block; margin-bottom:6px;">Tip de autocuidado de hoy</span>
+            <h3 style="margin-top:0;">${bebida.nombre}</h3>
+            <p style="margin-bottom:6px;">${bebida.detalle}</p>
+            <p class="texto-suave" style="margin-bottom:0;">Esto no reemplaza tratamiento médico — si tienen dudas, consulten a su médico.</p>
+          </div>
+          <a href="inicio.html" class="boton boton-primario" style="margin-bottom:10px;">Volver a Inicio</a>
+          <a href="pareja.html" class="boton boton-secundario">Ver otro masaje</a>
+        `;
+      });
+    }
+
+    (async function iniciar() {
+      usuarioMasajePareja = await requiereSesion();
+      if (usuarioMasajePareja) await renderMasajePareja();
+    })();
+  </script>
+</body>
+</html>

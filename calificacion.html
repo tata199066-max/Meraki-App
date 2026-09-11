@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Calificar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .estrellas { display: flex; gap: 8px; justify-content: center; margin: 18px 0; }
+    .estrella {
+      font-size: 40px; background: none; border: none; cursor: pointer; color: #cfc7b8; padding: 0;
+    }
+    .estrella.activa { color: var(--dorado); }
+    textarea {
+      width: 100%; min-height: 100px; padding: 14px 16px; border-radius: 12px;
+      border: 1.5px solid #cfc7b8; font-family: var(--fuente-texto); font-size: 15px; resize: vertical;
+    }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='inicio.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra">Tu opinión</span>
+    </div>
+
+    <div class="contenido" id="contenido-calificacion">
+      <h1 class="centrado">¿Cómo calificarías tu experiencia con Meraki App?</h1>
+      <div class="estrellas" id="estrellas">
+        <button class="estrella" data-valor="1">★</button>
+        <button class="estrella" data-valor="2">★</button>
+        <button class="estrella" data-valor="3">★</button>
+        <button class="estrella" data-valor="4">★</button>
+        <button class="estrella" data-valor="5">★</button>
+      </div>
+
+      <div class="campo">
+        <label for="comentario">Comentario (opcional)</label>
+        <textarea id="comentario" placeholder="Cuéntanos qué te ha parecido..."></textarea>
+      </div>
+
+      <label class="opcion" style="align-items:flex-start;">
+        <input type="checkbox" id="autoriza-compartir" style="margin-top:3px;" />
+        <span style="font-size:14px;">¿Nos autorizas a compartir este comentario (con tu nombre o iniciales) en redes sociales o en la página de Meraki?</span>
+      </label>
+
+      <button class="boton boton-primario" id="boton-enviar" style="margin-top:10px;">Enviar</button>
+      <a href="inicio.html" class="boton boton-texto centrado" style="display:block; margin-top:6px;">Ahora no</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script>
+    let usuarioCalificacion = null;
+    let estrellasSeleccionadas = 0;
+
+    document.querySelectorAll('.estrella').forEach(boton => {
+      boton.addEventListener('click', () => {
+        estrellasSeleccionadas = Number(boton.dataset.valor);
+        document.querySelectorAll('.estrella').forEach(b => {
+          b.classList.toggle('activa', Number(b.dataset.valor) <= estrellasSeleccionadas);
+        });
+      });
+    });
+
+    document.getElementById('boton-enviar').addEventListener('click', async () => {
+      if (estrellasSeleccionadas === 0) {
+        alert('Elige al menos una estrella antes de enviar.');
+        return;
+      }
+      await guardarCalificacion(
+        usuarioCalificacion.id,
+        estrellasSeleccionadas,
+        document.getElementById('comentario').value.trim(),
+        document.getElementById('autoriza-compartir').checked
+      );
+
+      document.getElementById('contenido-calificacion').innerHTML = `
+        <div class="tarjeta centrado" style="margin-top:60px;">
+          <div style="font-size:36px;">🙏</div>
+          <h2>¡Gracias por tu opinión!</h2>
+          <p class="texto-suave">Nos ayuda muchísimo a seguir mejorando Meraki App.</p>
+          <a href="inicio.html" class="boton boton-primario">Volver a Inicio</a>
+        </div>
+      `;
+    });
+
+    (async function iniciar() {
+      usuarioCalificacion = await requiereSesion();
+    })();
+  </script>
+</body>
+</html>

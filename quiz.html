@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Quiz de ingreso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" id="boton-atras" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra">Cuéntanos de ti</span>
+    </div>
+
+    <div class="contenido">
+      <div class="barra-progreso">
+        <div class="barra-progreso-relleno" id="barra-relleno" style="width:0%;"></div>
+      </div>
+
+      <div id="contenedor-paso"></div>
+
+      <div id="mensaje-error" class="mensaje-error" style="display:none;"></div>
+
+      <button class="boton boton-primario" id="boton-siguiente" style="margin-top:8px;">Siguiente</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/zonas.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>

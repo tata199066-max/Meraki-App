@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Masajes en pareja</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .zona-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--blanco);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--sombra);
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: var(--negro);
+    }
+    .zona-item .nombre-zona-wrap { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .zona-item .nombre-zona { font-weight: 700; font-size: 15px; }
+    .zona-item .nivel-etiqueta { font-size: 12px; color: #5a5a5a; }
+    .zona-item .etiquetas-derecha { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+    .zona-item .info-zona { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .zona-item .miniatura {
+      width: 52px; height: 52px; border-radius: 10px; object-fit: cover;
+      flex-shrink: 0; background: var(--beige);
+    }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='inicio.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra">Masajes en pareja</span>
+    </div>
+
+    <div class="contenido">
+      <p class="texto-suave">Técnicas para practicar acompañada — con postura, tiempo y presión recomendados.</p>
+      <div id="lista-pareja"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/pareja.js"></script>
+  <script>
+    (async function iniciar() {
+    const usuarioPareja = await requiereSesion();
+
+    if (usuarioPareja) {
+      const tieneAcceso = (item) =>
+        !item.premium ||
+        usuarioPareja.rol === 'admin' ||
+        usuarioPareja.estado_suscripcion === 'activo';
+
+      const contenedor = document.getElementById('lista-pareja');
+      let html = '';
+      for (const item of MASAJES_PAREJA) {
+        const etiqueta = item.premium
+          ? '<span class="etiqueta etiqueta-premium">Premium</span>'
+          : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
+        html += `
+          <a href="masaje-pareja.html?id=${item.id}" class="zona-item">
+            <span class="info-zona">
+              <img src="${item.imagen}" alt="" class="miniatura" />
+              <span class="nombre-zona-wrap">
+                <span class="nombre-zona">${item.nombre}</span>
+                <span class="nivel-etiqueta">${item.nivel} · ${item.tiempo}</span>
+              </span>
+            </span>
+            <span class="etiquetas-derecha">${etiqueta}</span>
+          </a>`;
+      }
+      contenedor.innerHTML = html;
+    }
+    })();
+  </script>
+</body>
+</html>

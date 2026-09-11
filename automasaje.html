@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Automasaje</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .zona-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--blanco);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--sombra);
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: var(--negro);
+    }
+    .zona-item .nombre-zona {
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .bloque-titulo {
+      margin-top: 26px;
+      margin-bottom: 12px;
+    }
+    .bloque-titulo:first-of-type {
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='inicio.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra">Automasaje</span>
+    </div>
+
+    <div class="contenido">
+      <p class="texto-suave">Elige una zona del cuerpo para ver la técnica paso a paso.</p>
+      <div id="lista-bloques"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/zonas.js"></script>
+  <script>
+    (async function iniciar() {
+    const usuarioAutomasaje = await requiereSesion();
+
+    if (usuarioAutomasaje) {
+      const tieneAcceso = (zona) =>
+        !zona.premium ||
+        usuarioAutomasaje.rol === 'admin' ||
+        usuarioAutomasaje.estado_suscripcion === 'activo';
+
+      const contenedor = document.getElementById('lista-bloques');
+      let html = '';
+      for (const bloque of BLOQUES) {
+        html += `<h2 class="bloque-titulo">${bloque}</h2>`;
+        const zonasDelBloque = ZONAS.filter(z => z.bloque === bloque);
+        for (const zona of zonasDelBloque) {
+          const acceso = tieneAcceso(zona);
+          const etiqueta = zona.premium
+            ? '<span class="etiqueta etiqueta-premium">Premium</span>'
+            : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
+          html += `
+            <a href="zona.html?id=${zona.id}" class="zona-item">
+              <span class="nombre-zona">${zona.nombre}</span>
+              ${etiqueta}
+            </a>`;
+        }
+      }
+      contenedor.innerHTML = html;
+    }
+    })();
+  </script>
+</body>
+</html>

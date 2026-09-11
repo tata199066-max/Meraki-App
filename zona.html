@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Zona</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .info-tarjeta { margin-bottom: 12px; }
+    .info-tarjeta .etiqueta-info {
+      font-weight: 700; font-size: 13px; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--verde-oscuro); margin-bottom: 6px; display: block;
+    }
+    .info-tarjeta.evitar .etiqueta-info { color: #b3453e; }
+
+    .camino-niveles { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 14px 2px; }
+    .nivel-boton {
+      flex-shrink: 0; width: 64px; height: 74px; border-radius: 14px; border: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      background: var(--blanco); box-shadow: var(--sombra); cursor: pointer; font-family: var(--fuente-texto);
+    }
+    .nivel-boton .num { font-weight: 700; font-size: 13px; }
+    .nivel-boton .dia { font-size: 10px; color: #5a5a5a; }
+    .nivel-boton.activo { background: var(--verde); color: var(--blanco); }
+    .nivel-boton.activo .dia { color: var(--blanco); opacity: 0.85; }
+    .nivel-boton.completado { background: var(--lavanda); }
+    .nivel-boton.bloqueado { opacity: 0.55; cursor: not-allowed; }
+    .nivel-boton .icono-estado { font-size: 16px; }
+
+    .diagrama-unico {
+      background: var(--beige); border-radius: 14px; padding: 14px;
+      text-align: center; margin-bottom: 14px;
+    }
+    .diagrama-titulo {
+      font-family: var(--fuente-titulo); font-weight: 600; font-size: 17px;
+      margin-bottom: 8px; color: var(--negro);
+    }
+    .diagrama-unico svg { width: 100%; max-width: 190px; height: auto; }
+
+    .diagrama-marco {
+      position: relative; width: 100%; max-width: 190px; margin: 0 auto;
+      border-radius: 12px; overflow: hidden; background: var(--beige);
+    }
+    .diagrama-imagen-base {
+      position: absolute; inset: 0; background-repeat: no-repeat;
+    }
+    .diagrama-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .temporizador {
+      font-family: var(--fuente-titulo); font-size: 48px; font-weight: 600; text-align: center; margin: 12px 0;
+    }
+    .controles-paso { display: flex; gap: 10px; }
+    .controles-paso .boton { flex: 1; }
+    .paso-contador { text-align: center; font-weight: 700; color: var(--verde-oscuro); margin-bottom: 4px; }
+    .candado { text-align: center; padding: 30px 10px; }
+    .candado .icono-candado { font-size: 40px; margin-bottom: 10px; }
+
+    .opcion-checkin {
+      display: block; width: 100%; text-align: left; padding: 16px; border-radius: 14px;
+      border: 1.5px solid #cfc7b8; background: var(--blanco); font-size: 16px; font-weight: 700;
+      margin-bottom: 10px; cursor: pointer;
+    }
+    .opcion-checkin:hover { border-color: var(--verde); }
+
+    .grafico-emocional { width: 100%; height: 110px; }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='automasaje.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra" id="titulo-zona">Zona</span>
+    </div>
+
+    <div class="contenido" id="contenido-zona">
+      <!-- se llena por JS -->
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/zonas.js"></script>
+  <script src="js/niveles.js"></script>
+  <script src="js/diagramas.js"></script>
+  <script src="js/bebidas.js"></script>
+  <script src="js/zona.js"></script>
+</body>
+</html>

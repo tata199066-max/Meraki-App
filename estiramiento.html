@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Estiramiento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .temporizador {
+      font-family: var(--fuente-titulo); font-size: 48px; font-weight: 600; text-align: center; margin: 12px 0;
+    }
+    .controles-paso { display: flex; gap: 10px; }
+    .controles-paso .boton { flex: 1; }
+    .paso-contador { text-align: center; font-weight: 700; color: var(--verde-oscuro); margin-bottom: 4px; }
+    .foto-tecnica {
+      width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radio);
+      margin-bottom: 14px; display: block; background: var(--beige);
+    }
+    .candado { text-align: center; padding: 30px 10px; }
+    .candado .icono-candado { font-size: 40px; margin-bottom: 10px; }
+    .opcion-checkin {
+      display: block; width: 100%; text-align: left; padding: 16px; border-radius: 14px;
+      border: 1.5px solid #cfc7b8; background: var(--blanco); font-size: 16px; font-weight: 700;
+      margin-bottom: 10px; cursor: pointer;
+    }
+    .opcion-checkin:hover { border-color: var(--verde); }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='estiramientos.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra" id="titulo-estiramiento">Estiramiento</span>
+    </div>
+
+    <div class="contenido" id="contenido-estiramiento"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/estiramientos.js"></script>
+  <script src="js/niveles.js"></script>
+  <script src="js/bebidas.js"></script>
+  <script src="js/estiramiento.js"></script>
+</body>
+</html>

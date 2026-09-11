@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Inicio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .menu-item {
+      background: var(--blanco);
+      border-radius: 16px;
+      padding: 18px 14px;
+      box-shadow: var(--sombra);
+      text-decoration: none;
+      color: var(--negro);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .menu-item .icono { font-size: 22px; }
+    .menu-item.proximamente {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .encabezado-inicio {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="contenido" style="padding-top:28px;">
+      <div class="encabezado-inicio">
+        <div>
+          <p class="texto-suave" style="margin-bottom:2px;">Hola,</p>
+          <h1 id="nombre-usuario" style="margin-bottom:0;">👋</h1>
+        </div>
+        <button class="boton-atras" id="boton-salir" title="Cerrar sesión" aria-label="Cerrar sesión">⏻</button>
+      </div>
+
+      <div class="tarjeta tarjeta-lavanda" style="display:flex; align-items:center; gap:12px;">
+        <div style="font-size:28px;">🔥</div>
+        <div>
+          <div style="font-weight:700; font-family:var(--fuente-titulo); font-size:20px;" id="texto-racha">0 días seguidos</div>
+          <div class="texto-suave">Sigue así, sin presión — lo importante es la constancia.</div>
+        </div>
+      </div>
+
+      <h2 style="margin-top:24px;">Tu recomendación de hoy</h2>
+      <div class="tarjeta" id="tarjeta-recomendacion">
+        <!-- se llena por JS -->
+      </div>
+
+      <div id="tarjetas-extra"></div>
+
+      <h2 style="margin-top:28px;">Explorar</h2>
+      <div class="menu-grid">
+        <a href="automasaje.html" class="menu-item">
+          <span class="icono">💆</span> Automasaje
+        </a>
+        <a href="estiramientos.html" class="menu-item">
+          <span class="icono">🧘</span> Estiramientos
+        </a>
+        <a href="pareja.html" class="menu-item">
+          <span class="icono">🤝</span> Masajes en pareja
+        </a>
+        <a href="progreso.html" class="menu-item">
+          <span class="icono">📈</span> Mi progreso
+        </a>
+        <a href="seguridad.html" class="menu-item" id="menu-seguridad" style="grid-column: span 2;">
+          <span class="icono">🛡️</span> Seguridad y contraindicaciones
+        </a>
+        <a href="admin.html" class="menu-item" id="menu-admin" style="grid-column: span 2; display:none;">
+          <span class="icono">🗂️</span> Panel de administrador
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/zonas.js"></script>
+  <script src="js/niveles.js"></script>
+  <script>
+    const RUTINAS_COMBINADAS = [
+      { nombre: 'Rutina de oficina completa', zonas: ['trapecio', 'antebrazo', 'lumbar'], minutos: 15 },
+      { nombre: 'Rutina para el estrés', zonas: ['trapecio', 'suboccipital', 'mandibula', 'abdomen'], minutos: 12 },
+      { nombre: 'Piernas y pies cansados', zonas: ['pantorrillas', 'planta_pie'], minutos: 8 },
+      { nombre: 'Espalda completa', zonas: ['omoplatos', 'dorsal', 'lumbar'], minutos: 12 },
+    ];
+    const HITOS_RACHA = [30, 90, 180, 365];
+
+    async function iniciarPantalla() {
+      const usuarioInicio = await requiereSesion();
+      if (!usuarioInicio) return;
+
+      const respuestas = await obtenerRespuestasQuiz(usuarioInicio.id);
+      if (!respuestas) {
+        window.location.href = 'quiz.html';
+      } else {
+        document.getElementById('nombre-usuario').textContent = usuarioInicio.nombre ? usuarioInicio.nombre : '👋';
+
+        if (usuarioInicio.rol === 'admin') {
+          document.getElementById('menu-admin').style.display = 'flex';
+        }
+
+        const racha = await registrarSesionHoy(usuarioInicio.id);
+        const dias = racha.dias_seguidos;
+        document.getElementById('texto-racha').textContent =
+          dias === 1 ? '1 día seguido' : `${dias} días seguidos`;
+
+        // Recomendación del día: primera zona marcada en el quiz que tenga
+        // relación conocida; si no hay match, se recomienda una zona gratis.
+        let zonaRecomendada = null;
+        if (Array.isArray(respuestas.zonas_dolor)) {
+          for (const dolor of respuestas.zonas_dolor) {
+            const idZona = MAPA_DOLOR_A_ZONA[dolor];
+            if (idZona) {
+              zonaRecomendada = obtenerZonaPorId(idZona);
+              if (zonaRecomendada) break;
+            }
+          }
+        }
+        if (!zonaRecomendada) {
+          zonaRecomendada = ZONAS.find(z => !z.premium);
+        }
+
+        const tarjeta = document.getElementById('tarjeta-recomendacion');
+        const etiqueta = zonaRecomendada.premium
+          ? '<span class="etiqueta etiqueta-premium">Premium</span>'
+          : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
+        tarjeta.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+            <h3 style="margin-bottom:0;">${zonaRecomendada.nombre}</h3>
+            ${etiqueta}
+          </div>
+          <p class="texto-suave" style="margin-bottom:14px;">${zonaRecomendada.porQue}</p>
+          <a href="zona.html?id=${zonaRecomendada.id}" class="boton boton-primario">Empezar ahora</a>
+        `;
+
+        await renderTarjetasExtra(usuarioInicio, dias);
+      }
+    }
+
+    async function renderTarjetasExtra(usuario, diasRacha) {
+      const contenedorExtra = document.getElementById('tarjetas-extra');
+      let html = '';
+
+      // Hitos de constancia
+      if (HITOS_RACHA.includes(diasRacha)) {
+        html += `
+          <div class="tarjeta tarjeta-lavanda" style="margin-top:16px;">
+            <div style="font-size:24px;">🏅</div>
+            <p style="margin-bottom:0; font-weight:700;">Llevas ${diasRacha} días cuidándote. Eso ya es un hábito.</p>
+          </div>
+        `;
+      }
+
+      // Calificación a los 30 días de racha (si no se ha ofrecido antes)
+      const claveOfrecida = 'meraki_calificacion_ofrecida_' + usuario.id;
+      if (diasRacha >= 30 && !localStorage.getItem(claveOfrecida)) {
+        localStorage.setItem(claveOfrecida, '1');
+        html += `
+          <div class="tarjeta" style="margin-top:16px;">
+            <p style="margin-bottom:10px;">¿Cómo calificarías tu experiencia con Meraki App hasta ahora?</p>
+            <a href="calificacion.html" class="boton boton-secundario">Calificar mi experiencia</a>
+          </div>
+        `;
+      }
+
+      // Reporte mensual (una vez al mes)
+      const mesActual = new Date().toISOString().slice(0, 7);
+      const claveReporte = 'meraki_reporte_mostrado_' + usuario.id;
+      const fechaRegistro = usuario.fecha_registro ? usuario.fecha_registro.slice(0, 7) : mesActual;
+      const yaPasoUnMes = mesActual > fechaRegistro;
+      if (yaPasoUnMes && localStorage.getItem(claveReporte) !== mesActual) {
+        localStorage.setItem(claveReporte, mesActual);
+        const stats = await calcularEstadisticasMensuales(usuario.id);
+        const zonaTop = stats.zonaTop ? obtenerZonaPorId(stats.zonaTop) : null;
+        html += `
+          <div class="tarjeta" style="margin-top:16px;">
+            <span class="texto-suave" style="font-weight:700;">Tu reporte de este mes</span>
+            <p style="margin:8px 0 4px 0;">✅ ${stats.sesiones} sesiones completadas</p>
+            ${zonaTop ? `<p style="margin:0 0 4px 0;">💆 Zona más trabajada: ${zonaTop.nombre}</p>` : ''}
+            <p style="margin:0;">🙂 ${stats.mejor} veces te sentiste mejor · 😐 ${stats.igual} igual · 😕 ${stats.peor} con más molestia</p>
+          </div>
+        `;
+      }
+
+      // Rutinas combinadas (si ya tiene al menos 3 zonas con nivel 2+)
+      if (await contarZonasConNivel(usuario.id, 2) >= 3) {
+        const combosHtml = RUTINAS_COMBINADAS.map(combo => {
+          const nombresZonas = combo.zonas.map(id => {
+            const z = obtenerZonaPorId(id);
+            return z ? z.nombre : id;
+          }).join(' + ');
+          const primeraZona = combo.zonas[0];
+          return `
+            <a href="zona.html?id=${primeraZona}" class="tarjeta" style="display:block; margin-bottom:10px;">
+              <strong>${combo.nombre}</strong>
+              <p class="texto-suave" style="margin:4px 0 0 0;">${nombresZonas} · ${combo.minutos} min</p>
+            </a>
+          `;
+        }).join('');
+        html += `
+          <h2 style="margin-top:24px;">Rutinas combinadas para ti</h2>
+          ${combosHtml}
+        `;
+      }
+
+      contenedorExtra.innerHTML = html;
+    }
+
+    async function calcularEstadisticasMensuales(usuarioId) {
+      const checkins = await obtenerCheckIns(usuarioId);
+      const zonasNiveles = await obtenerTodoElProgreso(usuarioId);
+      let sesiones = 0;
+      let conteoZonas = {};
+      Object.keys(zonasNiveles).forEach(zonaId => {
+        const completados = Object.keys(zonasNiveles[zonaId].completados || {});
+        sesiones += completados.length;
+        conteoZonas[zonaId] = completados.length;
+      });
+      let zonaTop = null, maxCount = 0;
+      Object.entries(conteoZonas).forEach(([zid, c]) => { if (c > maxCount) { maxCount = c; zonaTop = zid; } });
+      return {
+        sesiones,
+        zonaTop,
+        mejor: checkins.filter(c => c.respuesta === 'mejor').length,
+        igual: checkins.filter(c => c.respuesta === 'igual').length,
+        peor: checkins.filter(c => c.respuesta === 'peor').length,
+      };
+    }
+
+    document.getElementById('boton-salir').addEventListener('click', async () => {
+      await cerrarSesion();
+      window.location.href = 'index.html';
+    });
+
+    iniciarPantalla();
+  </script>
+</body>
+</html>

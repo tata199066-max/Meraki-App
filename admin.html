@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Administrador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .resumen-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
+    }
+    .resumen-tarjeta {
+      background: var(--blanco); border-radius: 14px; padding: 14px; box-shadow: var(--sombra); text-align: center;
+    }
+    .resumen-numero { font-family: var(--fuente-titulo); font-size: 26px; font-weight: 600; }
+    .resumen-label { font-size: 12px; color: #5a5a5a; margin-top: 2px; }
+
+    .usuario-fila {
+      background: var(--blanco); border-radius: 14px; padding: 14px 16px; box-shadow: var(--sombra); margin-bottom: 10px;
+    }
+    .usuario-fila .fila-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .usuario-fila .nombre { font-weight: 700; font-size: 15px; }
+    .usuario-fila .correo { font-size: 13px; color: #5a5a5a; }
+    .usuario-fila .meta { font-size: 12px; color: #8a8070; margin-top: 4px; }
+
+    .etiqueta-estado { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; letter-spacing: 0.03em; flex-shrink: 0; }
+    .etiqueta-estado.gratis { background: var(--lavanda); color: var(--negro); }
+    .etiqueta-estado.activo { background: var(--verde); color: var(--blanco); }
+    .etiqueta-estado.vencido { background: #e2a49e; color: var(--blanco); }
+    .etiqueta-estado.admin { background: var(--dorado); color: var(--blanco); }
+
+    .selector-estado {
+      width: 100%; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #cfc7b8;
+      font-family: var(--fuente-texto); font-size: 14px; background: var(--blanco); color: var(--negro);
+    }
+
+    .candado { text-align: center; padding: 60px 20px; }
+    .candado .icono-candado { font-size: 40px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='inicio.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra">Administrador</span>
+    </div>
+
+    <div class="contenido" id="contenido-admin"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script>
+    let usuarioAdmin = null;
+    const contenedorAdmin = document.getElementById('contenido-admin');
+
+    function formatearFecha(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function etiquetaEstado(usuario) {
+      if (usuario.rol === 'admin') return '<span class="etiqueta-estado admin">Admin</span>';
+      return `<span class="etiqueta-estado ${usuario.estado_suscripcion}">${usuario.estado_suscripcion}</span>`;
+    }
+
+    async function renderAdmin() {
+      if (!usuarioAdmin) return;
+
+      if (usuarioAdmin.rol !== 'admin') {
+        contenedorAdmin.innerHTML = `
+          <div class="tarjeta candado">
+            <div class="icono-candado">🔒</div>
+            <h3>Acceso restringido</h3>
+            <p class="texto-suave">Esta sección es solo para el rol de administrador.</p>
+            <a href="inicio.html" class="boton boton-primario" style="margin-top:10px; display:inline-flex;">Volver a Inicio</a>
+          </div>
+        `;
+        return;
+      }
+
+      const usuarios = await obtenerUsuarios();
+      const total = usuarios.length;
+      const gratis = usuarios.filter(u => u.rol !== 'admin' && u.estado_suscripcion === 'gratis').length;
+      const activos = usuarios.filter(u => u.rol !== 'admin' && u.estado_suscripcion === 'activo').length;
+      const vencidos = usuarios.filter(u => u.rol !== 'admin' && u.estado_suscripcion === 'vencido').length;
+
+      const filasUsuarios = usuarios
+        .slice()
+        .sort((a, b) => new Date(b.fecha_registro) - new Date(a.fecha_registro))
+        .map(u => `
+          <div class="usuario-fila">
+            <div class="fila-top">
+              <div>
+                <div class="nombre">${u.nombre || '(sin nombre)'}</div>
+                <div class="correo">${u.email}</div>
+                <div class="meta">Registrado el ${formatearFecha(u.fecha_registro)}</div>
+              </div>
+              ${etiquetaEstado(u)}
+            </div>
+            ${u.rol === 'admin' ? '' : `
+              <select class="selector-estado" data-id="${u.id}">
+                <option value="gratis" ${u.estado_suscripcion === 'gratis' ? 'selected' : ''}>Gratis</option>
+                <option value="activo" ${u.estado_suscripcion === 'activo' ? 'selected' : ''}>Activo</option>
+                <option value="vencido" ${u.estado_suscripcion === 'vencido' ? 'selected' : ''}>Vencido</option>
+              </select>
+            `}
+          </div>
+        `).join('');
+
+      contenedorAdmin.innerHTML = `
+        <div class="resumen-grid">
+          <div class="resumen-tarjeta">
+            <div class="resumen-numero">${total}</div>
+            <div class="resumen-label">usuarios totales</div>
+          </div>
+          <div class="resumen-tarjeta">
+            <div class="resumen-numero">${activos}</div>
+            <div class="resumen-label">suscripciones activas</div>
+          </div>
+          <div class="resumen-tarjeta">
+            <div class="resumen-numero">${gratis}</div>
+            <div class="resumen-label">en plan gratis</div>
+          </div>
+          <div class="resumen-tarjeta">
+            <div class="resumen-numero">${vencidos}</div>
+            <div class="resumen-label">vencidos</div>
+          </div>
+        </div>
+
+        <div class="mensaje-aviso">
+          <strong>Ingresos:</strong> todavía no se muestran cifras de dinero aquí porque la pasarela de pago real no está conectada (eso queda para la siguiente fase, junto con Supabase). Cuando esté lista, los ingresos se calculan automáticamente a partir de las suscripciones activas reales — nunca un número inventado.
+        </div>
+
+        <h2>Usuarios</h2>
+        ${filasUsuarios}
+      `;
+
+      contenedorAdmin.querySelectorAll('.selector-estado').forEach(select => {
+        select.addEventListener('change', async () => {
+          await actualizarEstadoSuscripcion(select.dataset.id, select.value);
+          renderAdmin();
+        });
+      });
+    }
+
+    (async function iniciar() {
+      usuarioAdmin = await requiereSesion();
+      if (usuarioAdmin) await renderAdmin();
+    })();
+  </script>
+</body>
+</html>

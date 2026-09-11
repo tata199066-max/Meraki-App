@@ -1,0 +1,313 @@
+/* ===== Meraki App — Estilos de marca ===== */
+
+:root {
+  --verde: #8BA886;
+  --verde-oscuro: #6f8f6a;
+  --beige: #E8E0D5;
+  --lavanda: #D8D3E3;
+  --negro: #1A1A1A;
+  --dorado: #C9A85C;
+  --blanco: #FFFFFF;
+
+  --radio: 18px;
+  --sombra: 0 4px 16px rgba(26, 26, 26, 0.08);
+  --fuente-titulo: 'Fraunces', serif;
+  --fuente-texto: 'Manrope', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--beige);
+  color: var(--negro);
+  font-family: var(--fuente-texto);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--fuente-titulo);
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+p {
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+a {
+  color: inherit;
+}
+
+.pantalla {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--beige);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.contenido {
+  flex: 1;
+  padding: 24px 20px 40px 20px;
+}
+
+/* Barra superior con botón atrás */
+.barra-superior {
+  display: flex;
+  align-items: center;
+  padding: 16px 12px;
+  gap: 12px;
+}
+
+.boton-atras {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--blanco);
+  box-shadow: var(--sombra);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--negro);
+  flex-shrink: 0;
+}
+
+.boton-atras:hover {
+  background: var(--lavanda);
+}
+
+.titulo-barra {
+  font-family: var(--fuente-titulo);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Botones */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 100px;
+  border: none;
+  font-family: var(--fuente-texto);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.boton:active {
+  transform: scale(0.98);
+}
+
+.boton-primario {
+  background: var(--verde);
+  color: var(--blanco);
+}
+
+.boton-primario:hover {
+  background: var(--verde-oscuro);
+}
+
+.boton-secundario {
+  background: var(--blanco);
+  color: var(--negro);
+  border: 1.5px solid var(--negro);
+}
+
+.boton-texto {
+  background: none;
+  color: var(--negro);
+  text-decoration: underline;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Tarjetas */
+.tarjeta {
+  background: var(--blanco);
+  border-radius: var(--radio);
+  padding: 20px;
+  box-shadow: var(--sombra);
+  margin-bottom: 16px;
+}
+
+.tarjeta-lavanda {
+  background: var(--lavanda);
+}
+
+.tarjeta-premium {
+  background: var(--lavanda);
+  position: relative;
+}
+
+.etiqueta {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.03em;
+}
+
+.etiqueta-gratis {
+  background: var(--verde);
+  color: var(--blanco);
+}
+
+.etiqueta-premium {
+  background: var(--dorado);
+  color: var(--blanco);
+}
+
+/* Formularios */
+.campo {
+  margin-bottom: 18px;
+}
+
+.campo label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.campo input[type="text"],
+.campo input[type="email"],
+.campo input[type="password"],
+.campo input[type="number"],
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #cfc7b8;
+  background: var(--blanco);
+  font-family: var(--fuente-texto);
+  font-size: 15px;
+  color: var(--negro);
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: 2px solid var(--verde);
+  border-color: var(--verde);
+}
+
+.opciones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #cfc7b8;
+  background: var(--blanco);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.opcion input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--verde);
+}
+
+.opcion.seleccionada {
+  border-color: var(--verde);
+  background: #f0f5ef;
+}
+
+.mensaje-error {
+  color: #b3453e;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+.mensaje-aviso {
+  background: #fff8e6;
+  border: 1px solid var(--dorado);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.logo {
+  font-family: var(--fuente-titulo);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--negro);
+  text-align: center;
+}
+
+.centrado {
+  text-align: center;
+}
+
+.espaciador {
+  flex: 1;
+}
+
+.texto-suave {
+  color: #5a5a5a;
+  font-size: 14px;
+}
+
+.imagen-marcador {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--beige);
+  border: 1.5px dashed #b8ac96;
+  border-radius: var(--radio);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a8070;
+  font-size: 13px;
+  text-align: center;
+  padding: 12px;
+}
+
+.barra-progreso {
+  width: 100%;
+  height: 6px;
+  background: var(--lavanda);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.barra-progreso-relleno {
+  height: 100%;
+  background: var(--verde);
+  transition: width 0.3s ease;
+}

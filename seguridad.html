@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Seguridad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .lista-segura { margin: 0 0 16px 0; padding-left: 20px; }
+    .lista-segura li { margin-bottom: 8px; line-height: 1.5; }
+    .tarjeta-roja { background: #fdeceb; border: 1px solid #e2a49e; }
+    .tarjeta-roja .titulo-tarjeta { color: #b3453e; }
+    .tarjeta-ambar { background: #fff8e6; border: 1px solid var(--dorado); }
+    .titulo-tarjeta { font-family: var(--fuente-titulo); font-weight: 600; font-size: 16px; margin-bottom: 8px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="barra-superior">
+      <button class="boton-atras" onclick="window.location.href='inicio.html'" aria-label="Atrás">&#8592;</button>
+      <span class="titulo-barra">Seguridad y contraindicaciones</span>
+    </div>
+
+    <div class="contenido">
+      <div class="mensaje-aviso">
+        Meraki App es una guía de bienestar con técnicas de automasaje. <strong>No es una app de fisioterapia ni reemplaza tratamiento médico.</strong> Si tienes una lesión o alguna duda de salud, consulta primero a un profesional.
+      </div>
+
+      <div class="tarjeta tarjeta-roja">
+        <span class="titulo-tarjeta">🚫 No recomendado / consultar primero</span>
+        <ul class="lista-segura">
+          <li>Hipertensión no controlada o severa</li>
+          <li>Diabetes con pérdida de sensibilidad</li>
+          <li>Problemas de coagulación o uso de anticoagulantes</li>
+          <li>Embarazo de riesgo o primer trimestre (evitar abdomen y zona lumbar-pélvica)</li>
+          <li>Cáncer o tratamiento oncológico activo</li>
+          <li>Trombosis venosa profunda, flebitis o varices avanzadas</li>
+          <li>Osteoporosis activa</li>
+          <li>Heridas abiertas, quemaduras, infecciones de piel o inflamación aguda</li>
+          <li>Gripe, resfriado o fiebre</li>
+          <li>Infecciones activas (herpes, verrugas virales, respiratorias)</li>
+          <li>Alergias a productos usados o piel reactiva</li>
+          <li>Cirugía reciente en la zona</li>
+          <li>Fracturas no consolidadas</li>
+        </ul>
+      </div>
+
+      <div class="tarjeta tarjeta-ambar">
+        <span class="titulo-tarjeta">⚠️ Con precaución</span>
+        <ul class="lista-segura">
+          <li>Hipertensión controlada</li>
+          <li>Diabetes controlada sin pérdida de sensibilidad</li>
+          <li>Hipotiroidismo/hipertiroidismo en tratamiento</li>
+          <li>Hernia discal diagnosticada</li>
+          <li>Fragilidad capilar o tendencia a moretones</li>
+        </ul>
+      </div>
+
+      <div class="tarjeta tarjeta-roja">
+        <span class="titulo-tarjeta">🛑 Detente de inmediato y consulta a un profesional si aparece</span>
+        <ul class="lista-segura">
+          <li>Dolor que se dispara hacia el brazo o la pierna</li>
+          <li>Hormigueo, adormecimiento o "corrientazos"</li>
+          <li>Mareo, náuseas o mucho malestar</li>
+          <li>Dolor que empeora en vez de aliviar</li>
+        </ul>
+      </div>
+
+      <div class="tarjeta">
+        <span class="titulo-tarjeta">✋ Regla de oro de la presión</span>
+        <p style="margin-bottom:0;">Debe sentirse como "duele bien" — nunca un dolor agudo o que se dispara hacia otra parte del cuerpo. Nunca presiones directo sobre la columna, un hueso inflamado o una articulación hinchada. La constancia es mejor que la intensidad.</p>
+      </div>
+
+      <div class="tarjeta tarjeta-lavanda">
+        <span class="titulo-tarjeta">🖐️ Siempre con las manos</span>
+        <p style="margin-bottom:0;">Todas las técnicas de Meraki se hacen con las manos como protagonistas. Herramientas como la pelota de tenis son solo una ayuda opcional, nunca el reemplazo de la técnica manual.</p>
+      </div>
+
+      <div class="tarjeta">
+        <span class="titulo-tarjeta">🔥 Calentar antes de presionar</span>
+        <p style="margin-bottom:0;">Nunca empieces directo con presión fuerte sobre el punto de tensión. Calienta primero la zona con movimientos suaves de deslizamiento durante 15-20 segundos, y solo después avanza a la presión focal. Esto ya está incorporado como primer paso en cada técnica de la app.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script>
+    requiereSesion().then(() => {});
+  </script>
+</body>
+</html>
