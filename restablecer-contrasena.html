@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meraki App — Nueva contraseña</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="pantalla">
+    <div class="contenido">
+      <h1 class="centrado">Poner una contraseña nueva</h1>
+      <p class="centrado texto-suave" id="subtitulo">Escribe tu nueva contraseña para tu cuenta de Meraki App.</p>
+
+      <form id="form-nueva-contrasena" novalidate>
+        <div class="campo">
+          <label for="password">Contraseña nueva</label>
+          <input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6" />
+        </div>
+
+        <div class="campo">
+          <label for="password2">Repite la contraseña nueva</label>
+          <input type="password" id="password2" name="password2" placeholder="Escríbela de nuevo" required minlength="6" />
+        </div>
+
+        <div id="mensaje-error" class="mensaje-error" style="display:none;"></div>
+        <div id="mensaje-exito" class="mensaje-aviso" style="display:none;"></div>
+
+        <button type="submit" class="boton boton-primario" id="boton-enviar">Guardar contraseña nueva</button>
+      </form>
+
+      <p class="centrado texto-suave" id="parrafo-vencido" style="display:none; margin-top:16px;">
+        Este link ya venció o no es válido. <a href="login.html?modo=login" style="font-weight:700; text-decoration:underline;">Vuelve a pedir uno nuevo</a>.
+      </p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script>
+    const form = document.getElementById('form-nueva-contrasena');
+    const mensajeError = document.getElementById('mensaje-error');
+    const mensajeExito = document.getElementById('mensaje-exito');
+    const botonEnviar = document.getElementById('boton-enviar');
+    const parrafoVencido = document.getElementById('parrafo-vencido');
+
+    let sesionLista = false;
+
+    supabase.auth.onAuthStateChange((evento, sesion) => {
+      if (evento === 'PASSWORD_RECOVERY' || sesion) {
+        sesionLista = true;
+      }
+    });
+
+    // Si después de un momento no llegó una sesión de recuperación, el link no sirve.
+    setTimeout(async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        form.style.display = 'none';
+        parrafoVencido.style.display = 'block';
+      }
+    }, 2500);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      const password2 = document.getElementById('password2').value;
+
+      mensajeError.style.display = 'none';
+      mensajeExito.style.display = 'none';
+
+      if (password.length < 6) {
+        mensajeError.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+        mensajeError.style.display = 'block';
+        return;
+      }
+      if (password !== password2) {
+        mensajeError.textContent = 'Las dos contraseñas no son iguales.';
+        mensajeError.style.display = 'block';
+        return;
+      }
+
+      botonEnviar.disabled = true;
+      botonEnviar.textContent = 'Guardando...';
+
+      const resultado = await actualizarContrasena(password);
+
+      if (resultado.error) {
+        mensajeError.textContent = resultado.error;
+        mensajeError.style.display = 'block';
+        botonEnviar.disabled = false;
+        botonEnviar.textContent = 'Guardar contraseña nueva';
+        return;
+      }
+
+      mensajeExito.textContent = 'Contraseña actualizada. Entrando...';
+      mensajeExito.style.display = 'block';
+      form.style.display = 'none';
+      setTimeout(() => { window.location.href = 'inicio.html'; }, 1200);
+    });
+  </script>
+</body>
+</html>

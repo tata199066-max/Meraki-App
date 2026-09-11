@@ -110,6 +110,20 @@ async function requiereSesion() {
   return usuario;
 }
 
+async function solicitarRecuperacionContrasena(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/restablecer-contrasena.html',
+  });
+  if (error) return { error: 'No se pudo enviar el correo. Verifica que esté bien escrito.' };
+  return { ok: true };
+}
+
+async function actualizarContrasena(nuevaContrasena) {
+  const { error } = await supabase.auth.updateUser({ password: nuevaContrasena });
+  if (error) return { error: 'No se pudo cambiar la contraseña. El link puede haber expirado — solicita uno nuevo.' };
+  return { ok: true };
+}
+
 async function actualizarEstadoSuscripcion(usuarioId, nuevoEstado) {
   await supabase.from('usuarios').update({ estado_suscripcion: nuevoEstado }).eq('id', usuarioId);
 }
