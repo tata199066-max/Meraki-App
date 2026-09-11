@@ -97,52 +97,52 @@ const ZONA_MUSCULO = {
   trapecio: {
     imagen: 'images/musculo-trapecio.png',
     puntos: [
-      { t: { x1: 90, y1: 111, x2: 120, y2: 160 }, tipo: 'circular' },   // "entre el cuello y el hombro"
-      { t: { x1: 100, y1: 95, x2: 112, y2: 108 }, tipo: 'presionar' },  // "borde lateral, cerca del cuello"
-      { t: { x1: 60, y1: 172, x2: 75, y2: 184 }, tipo: 'presionar' },   // "entre los omóplatos"
-      { t: { x1: 42, y1: 192, x2: 58, y2: 203 }, tipo: 'presionar' },   // "borde interno del omóplato, más bajo"
+      { t: { x1: 60, y1: 115, x2: 53, y2: 140 }, tipo: 'circular' },    // "entre el cuello y el hombro" (upper trapecio, fibras van del cráneo hacia el hombro)
+      { t: { x1: 68, y1: 92, x2: 60, y2: 108 }, tipo: 'presionar' },    // "borde lateral, cerca del cuello"
+      { t: { x1: 75, y1: 165, x2: 90, y2: 172 }, tipo: 'presionar' },   // "entre los omóplatos" (trapecio medio, más abajo)
+      { t: { x1: 70, y1: 188, x2: 85, y2: 198 }, tipo: 'presionar' },   // "borde interno del omóplato, más bajo" (trapecio inferior)
     ],
     nivelPunto: [0, 1, 2, 3],
   },
   suboccipital: {
     imagen: 'images/musculo-suboccipital.png',
     puntos: [
-      { t: { x1: 80, y1: 95, x2: 95, y2: 112 }, tipo: 'presionar' },    // borde óseo, base del cráneo
-      { t: { x1: 100, y1: 98, x2: 112, y2: 110 }, tipo: 'presionar' },  // punto lateral, cerca de la base del cráneo
+      { t: { x1: 70, y1: 90, x2: 78, y2: 102 }, tipo: 'presionar' },    // borde óseo, base del cráneo (nuca)
+      { t: { x1: 88, y1: 98, x2: 96, y2: 108 }, tipo: 'presionar' },    // punto lateral, cerca de la base del cráneo
     ],
     nivelPunto: [0, 0, 1, 1],
   },
   temporal: {
     imagen: 'images/musculo-temporal.png',
     puntos: [
-      { t: { x1: 45, y1: 95, x2: 90, y2: 112 }, tipo: 'circular' },     // recorrido cabello -> ojo
-      { t: { x1: 30, y1: 98, x2: 45, y2: 108 }, tipo: 'presionar' },    // punto posterior, cerca de la línea del cabello
+      { t: { x1: 38, y1: 31, x2: 111, y2: 68 }, tipo: 'circular' },     // recorrido línea del cabello -> esquina externa del ojo
+      { t: { x1: 30, y1: 78, x2: 42, y2: 90 }, tipo: 'presionar' },     // punto posterior, cerca de la línea del cabello, encima de la oreja
     ],
     nivelPunto: [0, 0, 1, 1],
   },
   mandibula: {
     imagen: 'images/musculo-mandibula.png',
     puntos: [
-      { t: { x1: 45, y1: 95, x2: 60, y2: 125 }, tipo: 'presionar' },    // masetero superficial
-      { t: { x1: 55, y1: 120, x2: 68, y2: 140 }, tipo: 'presionar' },   // punto profundo, ángulo de la mandíbula
+      { t: { x1: 45, y1: 96, x2: 60, y2: 128 }, tipo: 'presionar' },    // masetero superficial (delante de la oreja -> debajo de la mandíbula)
+      { t: { x1: 50, y1: 110, x2: 62, y2: 125 }, tipo: 'presionar' },   // punto profundo, ángulo de la mandíbula
     ],
     nivelPunto: [0, 0, 1, 1],
   },
   hombro: {
     imagen: 'images/musculo-hombro.png',
     puntos: [
-      { t: { x1: 85, y1: 105, x2: 88, y2: 158 }, tipo: 'presionar' },   // fibras externas/medias
-      { t: { x1: 70, y1: 95, x2: 75, y2: 125 }, tipo: 'presionar' },    // fibras anteriores (borde delantero del hombro)
-      { t: { x1: 100, y1: 120, x2: 103, y2: 155 }, tipo: 'presionar' }, // fibras posteriores (borde trasero del hombro)
+      { t: { x1: 85, y1: 105, x2: 88, y2: 158 }, tipo: 'presionar' },   // fibras externas/medias (deltoides, arriba -> abajo)
+      { t: { x1: 65, y1: 90, x2: 72, y2: 110 }, tipo: 'presionar' },    // fibras anteriores (borde delantero, cerca de la clavícula)
+      { t: { x1: 100, y1: 125, x2: 103, y2: 155 }, tipo: 'presionar' }, // fibras posteriores (borde trasero, hacia el omóplato)
     ],
     nivelPunto: [0, 0, 1, 2],
   },
   omoplatos: {
     imagen: 'images/musculo-omoplatos.png',
     puntos: [
-      { t: { x1: 25, y1: 80, x2: 68, y2: 172 }, tipo: 'presionar' },    // borde interno
-      { t: { x1: 30, y1: 60, x2: 45, y2: 75 }, tipo: 'presionar' },     // punto superior
-      { t: { x1: 35, y1: 35, x2: 48, y2: 50 }, tipo: 'presionar' },     // elevador de la escápula, hacia el cuello
+      { t: { x1: 40, y1: 138, x2: 58, y2: 148 }, tipo: 'presionar' },   // borde interno del omóplato, cerca de la columna
+      { t: { x1: 45, y1: 125, x2: 60, y2: 133 }, tipo: 'presionar' },   // punto superior (romboides menor, cerca de la columna)
+      { t: { x1: 55, y1: 95, x2: 68, y2: 105 }, tipo: 'presionar' },    // elevador de la escápula, hacia el cuello
     ],
     nivelPunto: [0, 0, 1, 2],
   },
@@ -150,43 +150,43 @@ const ZONA_MUSCULO = {
     imagen: 'images/musculo-dorsal.png',
     puntos: [
       { t: { x1: 70, y1: 118, x2: 95, y2: 140 }, tipo: 'presionar' },   // zona alta general
-      { t: { x1: 105, y1: 110, x2: 118, y2: 125 }, tipo: 'presionar' }, // borde externo, cerca de la axila
-      { t: { x1: 80, y1: 150, x2: 92, y2: 162 }, tipo: 'presionar' },   // ángulo inferior del omóplato
+      { t: { x1: 110, y1: 90, x2: 125, y2: 110 }, tipo: 'presionar' },  // borde externo, cerca de la axila
+      { t: { x1: 78, y1: 135, x2: 90, y2: 148 }, tipo: 'presionar' },   // ángulo inferior del omóplato
     ],
     nivelPunto: [0, 0, 1, 2],
   },
   lumbar: {
     imagen: 'images/musculo-lumbar.png',
     puntos: [
-      { t: { x1: 43, y1: 148, x2: 95, y2: 165 }, tipo: 'presionar' },   // a los lados de la columna
-      { t: { x1: 35, y1: 170, x2: 50, y2: 182 }, tipo: 'presionar' },   // cerca de la cresta de la cadera
+      { t: { x1: 35, y1: 165, x2: 100, y2: 180 }, tipo: 'presionar' },  // a los lados de la columna, bilateral
+      { t: { x1: 25, y1: 185, x2: 40, y2: 198 }, tipo: 'presionar' },   // cerca de la cresta de la cadera
     ],
     nivelPunto: [0, 0, 1, 1],
   },
   piriforme: {
     imagen: 'images/musculo-piriforme.png',
     puntos: [
-      { t: { x1: 65, y1: 100, x2: 70, y2: 113 }, tipo: 'presionar' },   // centro del glúteo
-      { t: { x1: 85, y1: 75, x2: 95, y2: 85 }, tipo: 'presionar' },     // glúteo medio, punto alto
-      { t: { x1: 85, y1: 95, x2: 95, y2: 105 }, tipo: 'presionar' },    // glúteo medio, punto medio
+      { t: { x1: 75, y1: 85, x2: 85, y2: 95 }, tipo: 'presionar' },     // centro del glúteo
+      { t: { x1: 95, y1: 65, x2: 105, y2: 75 }, tipo: 'presionar' },    // glúteo medio, punto alto (cerca del hueso de la cadera)
+      { t: { x1: 95, y1: 90, x2: 103, y2: 100 }, tipo: 'presionar' },   // glúteo medio, punto medio
     ],
     nivelPunto: [0, 0, 1, 2],
   },
   pantorrillas: {
     imagen: 'images/musculo-pantorrillas.png',
     puntos: [
-      { t: { x1: 90, y1: 160, x2: 70, y2: 110 }, tipo: 'deslizar' },    // ordeñe general, tobillo -> rodilla
-      { t: { x1: 55, y1: 150, x2: 50, y2: 115 }, tipo: 'presionar' },   // gastrocnemio interno
-      { t: { x1: 85, y1: 180, x2: 78, y2: 165 }, tipo: 'presionar' },   // sóleo, cerca del tendón de Aquiles
+      { t: { x1: 90, y1: 160, x2: 70, y2: 110 }, tipo: 'deslizar' },    // ordeñe general, tobillo -> rodilla, siempre hacia arriba
+      { t: { x1: 60, y1: 145, x2: 65, y2: 120 }, tipo: 'presionar' },   // gastrocnemio interno
+      { t: { x1: 75, y1: 175, x2: 70, y2: 160 }, tipo: 'presionar' },   // sóleo, cerca del tendón de Aquiles
     ],
     nivelPunto: [0, 0, 1, 2],
   },
   planta_pie: {
     imagen: 'images/musculo-planta-pie.png',
     puntos: [
-      { t: { x1: 90, y1: 150, x2: 75, y2: 65 }, tipo: 'deslizar' },     // talón -> dedos
-      { t: { x1: 70, y1: 110, x2: 78, y2: 100 }, tipo: 'presionar' },   // centro del arco
-      { t: { x1: 88, y1: 145, x2: 82, y2: 135 }, tipo: 'presionar' },   // combinado con la pantorrilla
+      { t: { x1: 88, y1: 155, x2: 78, y2: 75 }, tipo: 'deslizar' },     // talón -> dedos
+      { t: { x1: 75, y1: 100, x2: 82, y2: 112 }, tipo: 'presionar' },   // centro del arco
+      { t: { x1: 85, y1: 165, x2: 80, y2: 150 }, tipo: 'presionar' },   // combinado con la pantorrilla, cerca del talón/tobillo
     ],
     nivelPunto: [0, 0, 1, 2],
   },
@@ -194,8 +194,8 @@ const ZONA_MUSCULO = {
     imagen: 'images/musculo-antebrazo.png',
     puntos: [
       { t: { x1: 90, y1: 90, x2: 60, y2: 160 }, tipo: 'deslizar' },     // extensores y flexores, muñeca -> codo
-      { t: { x1: 95, y1: 75, x2: 100, y2: 90 }, tipo: 'presionar' },    // codo externo ("codo de tenista")
-      { t: { x1: 70, y1: 75, x2: 65, y2: 90 }, tipo: 'presionar' },     // codo interno ("codo de golfista")
+      { t: { x1: 88, y1: 78, x2: 95, y2: 90 }, tipo: 'presionar' },     // codo externo ("codo de tenista")
+      { t: { x1: 70, y1: 78, x2: 65, y2: 90 }, tipo: 'presionar' },     // codo interno ("codo de golfista")
     ],
     nivelPunto: [0, 0, 1, 2],
   },
@@ -203,8 +203,8 @@ const ZONA_MUSCULO = {
     imagen: 'images/musculo-mano-muneca.png',
     puntos: [
       { t: { x1: 60, y1: 135, x2: 70, y2: 95 }, tipo: 'deslizar' },     // palma, centro -> dedos
-      { t: { x1: 45, y1: 120, x2: 50, y2: 110 }, tipo: 'presionar' },   // base del pulgar
-      { t: { x1: 65, y1: 80, x2: 75, y2: 75 }, tipo: 'presionar' },     // espacios entre los dedos, dorso de la mano
+      { t: { x1: 92, y1: 115, x2: 102, y2: 130 }, tipo: 'presionar' },  // base del pulgar
+      { t: { x1: 55, y1: 75, x2: 65, y2: 85 }, tipo: 'presionar' },     // espacios entre los dedos, base de los dedos
     ],
     nivelPunto: [0, 0, 1, 2],
   },
@@ -212,17 +212,17 @@ const ZONA_MUSCULO = {
     imagen: 'images/musculo-pectorales.png',
     puntos: [
       { t: { x1: 75, y1: 115, x2: 105, y2: 100 }, tipo: 'presionar' },  // esternón -> costado
-      { t: { x1: 70, y1: 75, x2: 95, y2: 68 }, tipo: 'presionar' },     // porción clavicular
-      { t: { x1: 100, y1: 110, x2: 115, y2: 120 }, tipo: 'presionar' }, // pectoral menor, cerca de la axila
+      { t: { x1: 75, y1: 45, x2: 90, y2: 55 }, tipo: 'presionar' },     // porción clavicular, parte alta
+      { t: { x1: 110, y1: 100, x2: 122, y2: 112 }, tipo: 'presionar' }, // pectoral menor, cerca de la axila
     ],
     nivelPunto: [0, 0, 1, 2],
   },
   abdomen: {
     imagen: 'images/musculo-abdomen.png',
     puntos: [
-      { t: { x1: 83, y1: 83, x2: 95, y2: 108 }, tipo: 'circular' },     // círculos alrededor del ombligo
-      { t: { x1: 75, y1: 55, x2: 85, y2: 65 }, tipo: 'presionar' },     // debajo del esternón
-      { t: { x1: 75, y1: 115, x2: 85, y2: 125 }, tipo: 'presionar' },   // debajo del ombligo
+      { t: { x1: 75, y1: 78, x2: 88, y2: 95 }, tipo: 'circular' },      // círculos alrededor del ombligo
+      { t: { x1: 78, y1: 50, x2: 88, y2: 60 }, tipo: 'presionar' },     // debajo del esternón
+      { t: { x1: 78, y1: 100, x2: 88, y2: 112 }, tipo: 'presionar' },   // debajo del ombligo
     ],
     nivelPunto: [0, 0, 1, 2],
   },
