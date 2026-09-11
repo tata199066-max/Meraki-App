@@ -45,6 +45,10 @@
       <a href="login.html?modo=registro" class="boton boton-primario" style="margin-bottom:12px;">Crear mi cuenta</a>
       <a href="login.html?modo=login" class="boton boton-secundario">Ya tengo una cuenta</a>
 
+      <button id="boton-instalar-app" class="boton boton-secundario" style="display:none; margin-top:12px; align-items:center; justify-content:center; gap:8px;">
+        ⬇️ Descargar aplicación
+      </button>
+
       <p class="centrado texto-suave" style="margin-top:16px; font-size:12px;">
         <a href="terminos.html" style="text-decoration:underline;">Términos y Privacidad</a>
       </p>
@@ -54,7 +58,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/instalar-app.js"></script>
   <script>
+    configurarBotonInstalar('boton-instalar-app');
+
     // Si llegamos aquí desde el link de confirmación de correo, Supabase ya
     // creó la sesión (viene en el hash de la URL) — mandamos directo adentro
     // en vez de dejar a la persona parada en la pantalla de bienvenida.
