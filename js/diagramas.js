@@ -71,6 +71,20 @@ function dibujarFlechaTrayecto(x1, y1, x2, y2, tipoMovimiento) {
   return { defs, forma };
 }
 
+/* Línea de contexto: muy tenue y punteada, sin flecha protagonista, que
+   muestra por dónde sigue el músculo completo (cuando es un músculo largo,
+   como el trapecio o el dorsal) detrás del punto que se está trabajando
+   en este nivel — para que quede claro que ese punto es parte de un
+   músculo más grande, sin competir visualmente con el punto de hoy. */
+function dibujarLineaContexto(puntos) {
+  if (!puntos || puntos.length < 2) return '';
+  let d = `M${puntos[0].x} ${puntos[0].y}`;
+  for (let i = 1; i < puntos.length; i++) {
+    d += ` L${puntos[i].x} ${puntos[i].y}`;
+  }
+  return `<path d="${d}" fill="none" stroke="${NEGRO}" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 4" opacity="0.32" />`;
+}
+
 /* Región (óvalo) que resalta la zona trabajada por ese punto en concreto. */
 function dibujarRegion(x1, y1, x2, y2, opacidad) {
   const cx = (x1 + x2) / 2, cy = (y1 + y2) / 2;
@@ -103,6 +117,10 @@ const ZONA_MUSCULO = {
       { t: { x1: 70, y1: 188, x2: 85, y2: 198 }, tipo: 'presionar' },   // "borde interno del omóplato, más bajo" (trapecio inferior)
     ],
     nivelPunto: [0, 1, 2, 3],
+    // El trapecio es un músculo grande: esta línea tenue muestra que sigue
+    // desde la base del cráneo hasta la mitad de la espalda (paravertebral),
+    // aunque cada nivel solo trabaje un punto de ese recorrido.
+    contexto: [{ x: 64, y: 100 }, { x: 56.5, y: 127.5 }, { x: 82.5, y: 168.5 }, { x: 77.5, y: 193 }],
   },
   suboccipital: {
     imagen: 'images/musculo-suboccipital.png',
@@ -154,6 +172,7 @@ const ZONA_MUSCULO = {
       { t: { x1: 78, y1: 135, x2: 90, y2: 148 }, tipo: 'presionar' },   // ángulo inferior del omóplato
     ],
     nivelPunto: [0, 0, 1, 2],
+    contexto: [{ x: 117.5, y: 100 }, { x: 82.5, y: 129 }, { x: 84, y: 141.5 }],
   },
   lumbar: {
     imagen: 'images/musculo-lumbar.png',
@@ -180,6 +199,7 @@ const ZONA_MUSCULO = {
       { t: { x1: 75, y1: 175, x2: 70, y2: 160 }, tipo: 'presionar' },   // sóleo, cerca del tendón de Aquiles
     ],
     nivelPunto: [0, 0, 1, 2],
+    contexto: [{ x: 90, y: 160 }, { x: 72.5, y: 167.5 }, { x: 62.5, y: 132.5 }, { x: 70, y: 110 }],
   },
   planta_pie: {
     imagen: 'images/musculo-planta-pie.png',
@@ -198,6 +218,7 @@ const ZONA_MUSCULO = {
       { t: { x1: 70, y1: 78, x2: 65, y2: 90 }, tipo: 'presionar' },     // codo interno ("codo de golfista")
     ],
     nivelPunto: [0, 0, 1, 2],
+    contexto: [{ x: 60, y: 160 }, { x: 75, y: 122 }, { x: 91.5, y: 84 }],
   },
   mano_muneca: {
     imagen: 'images/musculo-mano-muneca.png',
@@ -256,7 +277,7 @@ function generarDiagramaMusculo(zonaId, numeroNivel, tipoMovimientoOverride) {
     const t = punto.t;
     const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, tipoMovimientoOverride || punto.tipo);
     defs = flecha.defs;
-    capas = dibujarRegion(t.x1, t.y1, t.x2, t.y2) + flecha.forma;
+    capas = dibujarLineaContexto(cfg.contexto) + dibujarRegion(t.x1, t.y1, t.x2, t.y2) + flecha.forma;
   }
 
   return `
