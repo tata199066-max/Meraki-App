@@ -10,8 +10,6 @@
   antes de pedirlos.
 */
 
-const NOTA_HERRAMIENTA_OPCIONAL = 'Esta técnica siempre se hace con las manos — Mary nunca usa aparatología. Si prefieres, también puedes ayudarte con una pelota de tenis o un rodillo en el punto de presión.';
-
 let usuarioZona = null;
 const idZona = new URLSearchParams(window.location.search).get('id');
 const zona = obtenerZonaPorId(idZona);
@@ -189,7 +187,6 @@ async function renderPrincipal() {
         </div>
         <button class="boton boton-primario" id="boton-siguiente-paso">${esUltimo ? 'Terminar nivel' : 'Siguiente paso'}</button>
       </div>
-      <p class="texto-suave" style="margin-top:4px;">${NOTA_HERRAMIENTA_OPCIONAL}</p>
     `;
   }
 

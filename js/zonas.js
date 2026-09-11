@@ -11,9 +11,7 @@
   niveles) y que no cambia según si alguien está suscrita o no.
 
   Regla de marca (identidad profesional de Mary): la técnica principal SIEMPRE
-  es con las manos. Herramientas como la pelota de tenis solo se mencionan
-  como opción adicional (ver NOTA_HERRAMIENTA_OPCIONAL en zona.js), nunca como
-  parte de los pasos numerados.
+  es con las manos.
 */
 
 const DIAS_NIVEL = [0, 3, 7, 14, 21]; // día en que se desbloquea cada nivel, contado desde que se completa el Nivel 1 de esa zona
