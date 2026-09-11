@@ -57,14 +57,18 @@ async function registrarUsuario({ nombre, email, password }) {
   });
 
   if (error) {
-    if (error.message && error.message.toLowerCase().includes('already registered')) {
+    const mensaje = (error.message || '').toLowerCase();
+    if (mensaje.includes('already registered')) {
       return { error: 'Ya existe una cuenta con ese correo.' };
+    }
+    if (mensaje.includes('rate limit')) {
+      return { error: 'Se enviaron demasiados correos en poco tiempo. Espera unos minutos e intenta de nuevo.' };
     }
     return { error: error.message };
   }
 
   if (!data.session) {
-    return { error: 'Revisa la configuración de confirmación de correo en Supabase (debe estar desactivada para esta app de prueba).' };
+    return { requiereConfirmacion: true };
   }
 
   // Pequeña espera para que el disparador de la base de datos cree el perfil.

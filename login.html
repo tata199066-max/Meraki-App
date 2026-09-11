@@ -48,6 +48,11 @@
         <span id="texto-cambio">¿Ya tienes cuenta?</span>
         <a href="#" id="link-cambio" style="font-weight:700; text-decoration:underline;">Inicia sesión</a>
       </p>
+
+      <p class="centrado texto-suave" id="parrafo-terminos" style="margin-top:14px; font-size:12px;">
+        Al crear tu cuenta aceptas nuestros
+        <a href="terminos.html" style="font-weight:700; text-decoration:underline;">Términos y Privacidad</a>.
+      </p>
     </div>
   </div>
 
@@ -69,6 +74,7 @@
     const linkOlvide = document.getElementById('link-olvide');
     const mensajeError = document.getElementById('mensaje-error');
     const mensajeExito = document.getElementById('mensaje-exito');
+    const parrafoTerminos = document.getElementById('parrafo-terminos');
 
     function actualizarVista() {
       mensajeError.style.display = 'none';
@@ -81,6 +87,7 @@
         campoPassword.style.display = 'none';
         botonEnviar.textContent = 'Enviar link de recuperación';
         parrafoOlvide.style.display = 'none';
+        parrafoTerminos.style.display = 'none';
         textoCambio.textContent = '¿Ya la recordaste?';
         linkCambio.textContent = 'Inicia sesión';
       } else if (modo === 'registro') {
@@ -90,6 +97,7 @@
         campoPassword.style.display = 'block';
         botonEnviar.textContent = 'Crear mi cuenta';
         parrafoOlvide.style.display = 'none';
+        parrafoTerminos.style.display = 'block';
         textoCambio.textContent = '¿Ya tienes cuenta?';
         linkCambio.textContent = 'Inicia sesión';
       } else {
@@ -99,6 +107,7 @@
         campoPassword.style.display = 'block';
         botonEnviar.textContent = 'Iniciar sesión';
         parrafoOlvide.style.display = 'block';
+        parrafoTerminos.style.display = 'none';
         textoCambio.textContent = '¿No tienes cuenta?';
         linkCambio.textContent = 'Regístrate';
       }
@@ -121,6 +130,9 @@
       const nombre = document.getElementById('nombre').value.trim();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
+
+      mensajeError.style.display = 'none';
+      mensajeExito.style.display = 'none';
 
       if (!email || (modo !== 'olvide' && !password)) {
         mensajeError.textContent = 'Por favor completa correo y contraseña.';
@@ -152,6 +164,14 @@
         resultado = await registrarUsuario({ nombre, email, password });
       } else {
         resultado = await iniciarSesion({ email, password });
+      }
+
+      if (resultado.requiereConfirmacion) {
+        mensajeExito.textContent = 'Listo, revisa tu correo (y la carpeta de spam) — te llegó un link para confirmar tu cuenta. Ábrelo y luego inicia sesión aquí.';
+        mensajeExito.style.display = 'block';
+        botonEnviar.disabled = false;
+        botonEnviar.textContent = 'Crear mi cuenta';
+        return;
       }
 
       if (resultado.error) {
