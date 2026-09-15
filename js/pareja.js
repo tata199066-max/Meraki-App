@@ -16,6 +16,12 @@ const MASAJES_PAREJA = [
     posturaRecibe: 'Sentada en una silla o en el piso, con la espalda relajada y los hombros sueltos.',
     posturaDa: 'De pie o de rodillas detrás de quien recibe, con ambas manos libres para trabajar el cuello y los hombros.',
     presion: 'Firme pero cómoda — pregunta siempre "¿así está bien?" antes de subir la intensidad.',
+    pasos: [
+      { titulo: 'Calentamiento', detalle: 'Con las palmas de ambas manos, desliza desde la base del cuello hacia los hombros, varias veces, sin presionar fuerte todavía.', segundos: 25 },
+      { titulo: 'Amasar los hombros', detalle: 'Con los dedos y el pulgar, toma el músculo del hombro entre tus dedos y amasa suave, de adentro hacia afuera, en ambos lados.', segundos: 40 },
+      { titulo: 'Presión a los lados del cuello', detalle: 'Con los pulgares, presiona suave y sostenido a los lados de la columna cervical (nunca sobre el hueso), contando unos segundos y soltando despacio.', segundos: 30 },
+      { titulo: 'Cierre', detalle: 'Apoya las manos quietas sobre los hombros de quien recibe unos segundos, respirando juntas.', segundos: 20 },
+    ],
   },
   {
     id: 'espalda_alta_pareja',
@@ -27,6 +33,12 @@ const MASAJES_PAREJA = [
     posturaRecibe: 'Boca abajo en la cama o sentada inclinada hacia adelante, apoyada en una almohada.',
     posturaDa: 'De pie a un lado, o a horcajadas si es en la cama, con acceso cómodo a ambos omóplatos.',
     presion: 'Media, en círculos amplios sobre los omóplatos, nunca directo sobre el hueso.',
+    pasos: [
+      { titulo: 'Calentamiento', detalle: 'Desliza ambas manos desde la mitad de la espalda hacia los hombros, varias veces, con presión suave.', segundos: 25 },
+      { titulo: 'Círculos en los omóplatos', detalle: 'Con las palmas o los pulgares, haz círculos amplios alrededor de cada omóplato, uno a la vez, sin presionar directo sobre el hueso.', segundos: 45 },
+      { titulo: 'Presión en el borde interno', detalle: 'Con los pulgares, presión sostenida en el borde interno del omóplato (el lado más cercano a la columna, nunca sobre ella). Cuenta unos segundos y suelta despacio.', segundos: 30 },
+      { titulo: 'Cierre', detalle: 'Desliza una vez más desde la espalda baja hasta los hombros, terminando con las manos quietas sobre la espalda alta.', segundos: 20 },
+    ],
   },
   {
     id: 'espalda_baja_pareja',
@@ -38,6 +50,12 @@ const MASAJES_PAREJA = [
     posturaRecibe: 'Boca abajo, con una almohada bajo el abdomen para aplanar la zona lumbar.',
     posturaDa: 'De rodillas a un lado, usando el peso del cuerpo en vez de solo la fuerza del brazo.',
     presion: 'Suave a media, siempre a los lados de la columna, nunca sobre ella.',
+    pasos: [
+      { titulo: 'Calentamiento', detalle: 'Con las palmas, desliza a los lados de la columna desde la mitad de la espalda hacia la cadera, varias veces, sin presionar fuerte.', segundos: 25 },
+      { titulo: 'Presión con el peso del cuerpo', detalle: 'Apoya las palmas a los lados de la columna (nunca sobre ella) y presiona suave usando el peso del cuerpo, no solo el brazo. Sostén unos segundos y suelta.', segundos: 40 },
+      { titulo: 'Repite del otro lado', detalle: 'Haz el mismo movimiento en el lado contrario de la columna.', segundos: 40 },
+      { titulo: 'Cierre', detalle: 'Desliza una vez más, suave, desde la espalda media hacia la cadera.', segundos: 20 },
+    ],
   },
   {
     id: 'piernas_pareja',
@@ -49,6 +67,12 @@ const MASAJES_PAREJA = [
     posturaRecibe: 'Acostada boca arriba, con las piernas apoyadas sobre las piernas de quien da.',
     posturaDa: 'Sentada, con las piernas de la otra persona apoyadas de forma cómoda y estable.',
     presion: 'Deslizamiento firme desde el tobillo hacia la rodilla, siempre hacia arriba (ayuda a la circulación de retorno).',
+    pasos: [
+      { titulo: 'Calentamiento', detalle: 'Con ambas manos rodeando la pantorrilla, desliza firme desde el tobillo hacia la rodilla, siempre hacia arriba — nunca hacia abajo. Repite varias veces.', segundos: 30 },
+      { titulo: 'Amasar la pantorrilla', detalle: 'Con ambas manos, toma y suelta el músculo de la pantorrilla suavemente, como amasando, subiendo poco a poco hacia la rodilla.', segundos: 40 },
+      { titulo: 'Cambia de pierna', detalle: 'Repite los dos movimientos anteriores en la otra pierna.', segundos: 60 },
+      { titulo: 'Cierre', detalle: 'Un deslizamiento final, suave y lento, desde el tobillo hasta la rodilla en ambas piernas.', segundos: 20 },
+    ],
   },
   {
     id: 'pies_pareja',
@@ -60,6 +84,12 @@ const MASAJES_PAREJA = [
     posturaRecibe: 'Sentada o acostada, con el pie apoyado sobre las piernas de quien da.',
     posturaDa: 'Sentada frente a quien recibe, sosteniendo el pie con ambas manos.',
     presion: 'Firme con los pulgares, desde el talón hacia los dedos.',
+    pasos: [
+      { titulo: 'Calentamiento', detalle: 'Sostén el pie con ambas manos y desliza los pulgares desde el talón hacia los dedos, varias veces, con presión suave.', segundos: 25 },
+      { titulo: 'Presión en el arco', detalle: 'Con los pulgares, haz círculos firmes en el arco del pie (la zona donde más se acumula la tensión), sosteniendo unos segundos en el punto más tenso.', segundos: 35 },
+      { titulo: 'Cambia de pie', detalle: 'Repite los dos movimientos anteriores en el otro pie.', segundos: 60 },
+      { titulo: 'Cierre', detalle: 'Estira suavemente cada dedo del pie, uno por uno, y termina con las manos envolviendo el pie unos segundos.', segundos: 25 },
+    ],
   },
   {
     id: 'manos_pareja',
@@ -71,6 +101,12 @@ const MASAJES_PAREJA = [
     posturaRecibe: 'Sentada, con el brazo apoyado y relajado sobre una mesa o sobre las piernas de quien da.',
     posturaDa: 'Sentada frente a quien recibe, sosteniendo la mano y el antebrazo con ambas manos.',
     presion: 'Suave a media, en círculos desde la muñeca hacia el codo, y en la palma hacia los dedos.',
+    pasos: [
+      { titulo: 'Círculos en la palma', detalle: 'Con los pulgares, haz círculos suaves en el centro de la palma, extendiéndote poco a poco hacia la base de cada dedo.', segundos: 35 },
+      { titulo: 'Deslizamiento en el antebrazo', detalle: 'Con ambas manos rodeando el antebrazo, desliza desde la muñeca hacia el codo, con presión media, varias veces.', segundos: 35 },
+      { titulo: 'Cambia de brazo', detalle: 'Repite los dos movimientos anteriores en el otro brazo.', segundos: 60 },
+      { titulo: 'Cierre', detalle: 'Estira suavemente cada dedo de la mano, uno por uno.', segundos: 20 },
+    ],
   },
   {
     id: 'gluteo_cadera_pareja',
@@ -83,6 +119,12 @@ const MASAJES_PAREJA = [
     posturaDa: 'De rodillas a un lado, con las manos siempre visibles y los movimientos anunciados en voz alta.',
     presion: 'Suave a media, con los nudillos o la palma, deteniéndose de inmediato si la otra persona lo pide.',
     notaConsentimiento: 'Esta técnica requiere consentimiento explícito y comunicación constante durante toda la sesión: pregunta antes de empezar y detente en cualquier momento si te lo piden.',
+    pasos: [
+      { titulo: 'Calentamiento', detalle: 'Con la palma abierta, desliza suave sobre todo el glúteo, avisando cada movimiento en voz alta antes de hacerlo.', segundos: 30 },
+      { titulo: 'Presión con la palma', detalle: 'Con la palma o los nudillos, presión suave a media en círculos amplios, preguntando "¿así está bien?" y ajustando según la respuesta.', segundos: 45 },
+      { titulo: 'Cambia de lado', detalle: 'Repite el mismo movimiento en el otro lado.', segundos: 45 },
+      { titulo: 'Cierre', detalle: 'Termina con las manos quietas y firmes unos segundos, avisando que ya vas a terminar.', segundos: 20 },
+    ],
   },
   {
     id: 'rutina_completa_pareja',

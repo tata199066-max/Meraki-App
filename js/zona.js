@@ -39,34 +39,26 @@ const GUIA_TECNICA = {
   presionar: '<strong>Cómo hacer esta presión:</strong> baja con una presión media y constante hasta sentir el punto de tensión, sostén un momento ahí, y suelta despacio. Repite el mismo recorrido 3 a 5 veces, bajando la intensidad si sientes una molestia que se dispara hacia otra parte del cuerpo.',
 };
 
-/* ---------- Sonido de inicio/fin del temporizador ---------- */
-let contextoAudio = null;
-function reproducirTono(frecuencia, duracionMs, retrasoMs) {
-  setTimeout(() => {
-    try {
-      if (!contextoAudio) contextoAudio = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = contextoAudio.createOscillator();
-      const ganancia = contextoAudio.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = frecuencia;
-      ganancia.gain.setValueAtTime(0.15, contextoAudio.currentTime);
-      ganancia.gain.exponentialRampToValueAtTime(0.001, contextoAudio.currentTime + duracionMs / 1000);
-      osc.connect(ganancia);
-      ganancia.connect(contextoAudio.destination);
-      osc.start();
-      osc.stop(contextoAudio.currentTime + duracionMs / 1000);
-    } catch (e) { /* si el navegador bloquea el audio, seguimos sin sonido */ }
-  }, retrasoMs || 0);
-}
-function sonarInicio() { reproducirTono(880, 150, 0); }
-function sonarFin() { reproducirTono(660, 150, 0); reproducirTono(880, 250, 180); }
+/* El formato de tiempo y los pitidos de inicio/fin viven en
+   js/temporizador.js (compartido con la pantalla de masaje en pareja). */
 
 function tieneAccesoPremium() {
   return usuarioZona.rol === 'admin' || usuarioZona.estado_suscripcion === 'activo';
 }
 
+/*
+  FASE DE PRUEBA GRATUITA: mientras se está probando la app con gente
+  conocida (antes de conectar el cobro), todas las zonas quedan abiertas
+  para que puedan ver la técnica completa y dar su opinión — en vez de
+  toparse con la pantalla de "Quiero suscribirme".
+
+  Cuando llegue el momento de activar el cobro de verdad: cambiar esta
+  función para que vuelva a usar tieneAccesoPremium(), y en Supabase
+  volver a poner tiene_suscripcion_activa() con su lógica real (ver
+  supabase/01_esquema_y_seguridad.sql).
+*/
 function puedeVerZona() {
-  return !zona.premium || tieneAccesoPremium();
+  return true;
 }
 
 async function render() {
@@ -100,6 +92,10 @@ function renderTarjetasInfo() {
     ? '<span class="etiqueta etiqueta-premium">Premium</span>'
     : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
 
+  const avisoPremium = zona.premium
+    ? `<div class="tarjeta-guia-tecnica" style="background:var(--dorado, #e8c874); opacity:0.85;">🔓 Esta zona pasará a ser de pago más adelante — por ahora la estás viendo gratis mientras probamos la app. Cuéntanos qué te parece.</div>`
+    : '';
+
   let grafico = '';
   if (zona.categoriaEmocional) {
     grafico = `
@@ -116,6 +112,7 @@ function renderTarjetasInfo() {
       <h1 style="margin-bottom:0;">${zona.nombre}</h1>
       ${etiqueta}
     </div>
+    ${avisoPremium}
     <div class="tarjeta info-tarjeta">
       <span class="etiqueta-info">Por qué se tensiona</span>
       <p style="margin-bottom:0;">${zona.porQue}</p>
@@ -248,11 +245,6 @@ async function renderPrincipal() {
   }
 }
 
-function formatearTiempo(segundos) {
-  const m = Math.floor(segundos / 60);
-  const s = segundos % 60;
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
 
 function nivelActual() {
   return zona.niveles[nivelIndice];

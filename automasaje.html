@@ -53,6 +53,9 @@
 
     <div class="contenido">
       <p class="texto-suave">Elige una zona del cuerpo para ver la técnica paso a paso.</p>
+      <div class="mensaje-aviso">
+        🖐️ Todas las técnicas son con las manos. Las zonas marcadas con 🎾 son más difíciles de alcanzar tú sola — puedes pedirle ayuda a alguien, o apoyarte contra la pared o el piso con una pelota de tenis u otro objeto sencillo que tengas en casa.
+      </div>
       <div id="lista-bloques"></div>
     </div>
   </div>
@@ -81,9 +84,10 @@
           const etiqueta = zona.premium
             ? '<span class="etiqueta etiqueta-premium">Premium</span>'
             : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
+          const nombreConIcono = zona.alcanceDificil ? `${zona.nombre} 🎾` : zona.nombre;
           html += `
             <a href="zona.html?id=${zona.id}" class="zona-item">
-              <span class="nombre-zona">${zona.nombre}</span>
+              <span class="nombre-zona">${nombreConIcono}</span>
               ${etiqueta}
             </a>`;
         }

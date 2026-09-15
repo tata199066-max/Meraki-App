@@ -86,7 +86,7 @@ const ZONAS = [
     ],
   },
   {
-    id: 'omoplatos', nombre: 'Omóplatos (romboides / escápula)', bloque: 'Espalda', premium: true, categoriaEmocional: false,
+    id: 'omoplatos', nombre: 'Omóplatos (romboides / escápula)', bloque: 'Espalda', premium: true, categoriaEmocional: false, alcanceDificil: true,
     porQue: 'Es la zona típica de "cargar la mochila del estrés" — se tensiona por mantener los hombros hacia adelante frente a la computadora.',
     datoClinico: 'Trabajar esta zona con las manos ayuda a liberar también estructuras cercanas al manguito rotador, mejorando la movilidad del hombro.',
     evitarSi: 'Nunca presionar directo sobre el borde óseo de la escápula, solo sobre el músculo.',
@@ -99,7 +99,7 @@ const ZONAS = [
     ],
   },
   {
-    id: 'dorsal', nombre: 'Dorsal / zona alta de la espalda', bloque: 'Espalda', premium: true, categoriaEmocional: false,
+    id: 'dorsal', nombre: 'Dorsal / zona alta de la espalda', bloque: 'Espalda', premium: true, categoriaEmocional: false, alcanceDificil: true,
     porQue: 'Las horas de mala postura frente a la pantalla cargan esta zona ancha de la espalda, que conecta el hombro con la zona lumbar.',
     datoClinico: 'El automasaje de esta zona alcanza el redondo mayor y el dorsal ancho — trabajar despacio y profundo con los nudillos da mayor beneficio que un pase rápido.',
     evitarSi: 'Dolor agudo tipo "punzada" al respirar hondo (puede ser otra causa, no muscular).',
@@ -112,7 +112,7 @@ const ZONAS = [
     ],
   },
   {
-    id: 'lumbar', nombre: 'Lumbar (incluye cuadrado lumbar)', bloque: 'Espalda', premium: false, categoriaEmocional: true,
+    id: 'lumbar', nombre: 'Lumbar (incluye cuadrado lumbar)', bloque: 'Espalda', premium: false, categoriaEmocional: true, alcanceDificil: true,
     porQue: 'Es de las zonas que más carga acumula por estar sentado muchas horas o cargar peso con mala postura. El cuadrado lumbar es el músculo detrás del típico "dolor de riñones". La tensión emocional sostenida (preocupación constante, ansiedad) también se acumula aquí, incluso sin haber cargado peso ni pasado horas sentada.',
     datoClinico: 'El automasaje lumbar se trabaja siempre a los lados de la columna (nunca sobre ella), con movimientos lentos, entre 3 y 6 minutos por lado.',
     evitarSi: 'Dolor que baja como un rayo hacia la pierna (posible compromiso del nervio ciático) — ahí no se automasajea, se consulta primero.',

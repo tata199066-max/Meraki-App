@@ -49,14 +49,103 @@
   <script src="js/pareja.js"></script>
   <script src="js/niveles.js"></script>
   <script src="js/bebidas.js"></script>
+  <script src="js/temporizador.js"></script>
   <script>
     let usuarioMasajePareja = null;
     const idMasajePareja = new URLSearchParams(window.location.search).get('id');
     const masajePareja = obtenerMasajeParejaPorId(idMasajePareja);
     const contenedorMP = document.getElementById('contenido-masaje-pareja');
 
+    let pasoIndiceMP = 0;
+    let segundosRestantesMP = 0;
+    let temporizadorIdMP = null;
+    let enPausaMP = true;
+
     function tieneAccesoMasajePareja() {
       return usuarioMasajePareja.rol === 'admin' || usuarioMasajePareja.estado_suscripcion === 'activo';
+    }
+
+    function detenerTemporizadorMP() {
+      if (temporizadorIdMP) { clearInterval(temporizadorIdMP); temporizadorIdMP = null; }
+    }
+
+    function iniciarPasoActualMP() {
+      detenerTemporizadorMP();
+      segundosRestantesMP = masajePareja.pasos[pasoIndiceMP].segundos;
+      enPausaMP = true;
+    }
+
+    function alternarPausaMP() {
+      if (enPausaMP) {
+        enPausaMP = false;
+        sonarInicio();
+        document.getElementById('boton-pausa-mp').textContent = 'Pausar';
+        temporizadorIdMP = setInterval(() => {
+          segundosRestantesMP--;
+          const elTexto = document.getElementById('texto-temporizador-mp');
+          if (elTexto) elTexto.textContent = formatearTiempo(Math.max(segundosRestantesMP, 0));
+          if (segundosRestantesMP <= 0) {
+            detenerTemporizadorMP();
+            enPausaMP = true;
+            sonarFin();
+            const elBoton = document.getElementById('boton-pausa-mp');
+            if (elBoton) elBoton.textContent = 'Iniciar';
+          }
+        }, 1000);
+      } else {
+        enPausaMP = true;
+        detenerTemporizadorMP();
+        document.getElementById('boton-pausa-mp').textContent = 'Iniciar';
+      }
+    }
+
+    function renderTecnicaMP() {
+      const paso = masajePareja.pasos[pasoIndiceMP];
+      const esUltimo = pasoIndiceMP === masajePareja.pasos.length - 1;
+      document.getElementById('bloque-tecnica-mp').innerHTML = `
+        <div class="paso-contador">Paso ${pasoIndiceMP + 1} de ${masajePareja.pasos.length}</div>
+        <h3>${paso.titulo}</h3>
+        <p>${paso.detalle}</p>
+        <div class="temporizador" id="texto-temporizador-mp">${formatearTiempo(segundosRestantesMP || paso.segundos)}</div>
+        <div class="controles-paso" style="margin-bottom:10px;">
+          <button class="boton boton-secundario" id="boton-pausa-mp">${enPausaMP ? 'Iniciar' : 'Pausar'}</button>
+          <button class="boton boton-secundario" id="boton-reiniciar-mp">Reiniciar</button>
+        </div>
+        <button class="boton boton-primario" id="boton-siguiente-mp">${esUltimo ? 'Terminar' : 'Siguiente paso'}</button>
+      `;
+      document.getElementById('boton-pausa-mp').addEventListener('click', alternarPausaMP);
+      document.getElementById('boton-reiniciar-mp').addEventListener('click', () => { iniciarPasoActualMP(); renderTecnicaMP(); });
+      document.getElementById('boton-siguiente-mp').addEventListener('click', async () => {
+        detenerTemporizadorMP();
+        if (pasoIndiceMP < masajePareja.pasos.length - 1) {
+          pasoIndiceMP++;
+          iniciarPasoActualMP();
+          renderTecnicaMP();
+          window.scrollTo(0, 0);
+        } else {
+          await finalizarMasajePareja();
+        }
+      });
+    }
+
+    async function finalizarMasajePareja() {
+      await registrarSesionHoy(usuarioMasajePareja.id);
+      const bebida = await elegirBebida(usuarioMasajePareja.id, 'relajacion');
+      contenedorMP.innerHTML = `
+        <div class="tarjeta centrado" style="margin-top:20px;">
+          <div style="font-size:40px;">✅</div>
+          <h2>¡Listo!</h2>
+          <p class="texto-suave">Disfruten un momento de calma después de esta sesión.</p>
+        </div>
+        <div class="tarjeta tarjeta-lavanda">
+          <span class="etiqueta-info" style="color:var(--negro); font-weight:700; font-size:13px; text-transform:uppercase; display:block; margin-bottom:6px;">Tip de autocuidado de hoy</span>
+          <h3 style="margin-top:0;">${bebida.nombre}</h3>
+          <p style="margin-bottom:6px;">${bebida.detalle}</p>
+          <p class="texto-suave" style="margin-bottom:0;">Esto no reemplaza tratamiento médico — si tienen dudas, consulten a su médico.</p>
+        </div>
+        <a href="inicio.html" class="boton boton-primario" style="margin-bottom:10px;">Volver a Inicio</a>
+        <a href="pareja.html" class="boton boton-secundario">Ver otro masaje</a>
+      `;
     }
 
     async function renderMasajePareja() {
@@ -80,6 +169,10 @@
         <p class="texto-suave" style="margin-bottom:14px;">${masajePareja.nivel} · ${masajePareja.tiempo}</p>
         <img src="${masajePareja.imagen}" alt="${masajePareja.nombre}" class="foto-tecnica" />
       `;
+
+      const avisoPremiumHtml = masajePareja.premium ? `
+        <div class="tarjeta-guia-tecnica" style="background:var(--dorado, #e8c874); opacity:0.85;">🔓 Este masaje pasará a ser de pago más adelante — por ahora lo estás viendo gratis mientras probamos la app.</div>
+      ` : '';
 
       if (!puedeVer) {
         contenedorMP.innerHTML = encabezado + `
@@ -110,7 +203,11 @@
         </div>
       ` : '';
 
-      contenedorMP.innerHTML = encabezado + consentimientoHtml + `
+      const tecnicaBloqueHtml = masajePareja.pasos
+        ? `<div class="tarjeta" id="bloque-tecnica-mp"></div>`
+        : `<button class="boton boton-primario" id="boton-hecho-mp">Marcar como realizado</button>`;
+
+      contenedorMP.innerHTML = encabezado + avisoPremiumHtml + consentimientoHtml + `
         <div class="tarjeta info-tarjeta">
           <span class="etiqueta-info">Postura de quien recibe</span>
           <p style="margin-bottom:0;">${masajePareja.posturaRecibe}</p>
@@ -128,28 +225,16 @@
           <span class="etiqueta-info">Cuándo evitarlo</span>
           <p style="margin-bottom:0;">Aplican las mismas contraindicaciones generales de automasaje: hipertensión no controlada, embarazo de riesgo, problemas de coagulación, heridas o infecciones activas, y detenerse de inmediato si aparece dolor que se dispara, hormigueo o mareo. Consulta la sección de Seguridad y contraindicaciones ante cualquier duda.</p>
         </div>
-        <button class="boton boton-primario" id="boton-hecho-mp">Marcar como realizado</button>
+        ${tecnicaBloqueHtml}
       `;
 
-      document.getElementById('boton-hecho-mp').addEventListener('click', async () => {
-        await registrarSesionHoy(usuarioMasajePareja.id);
-        const bebida = await elegirBebida(usuarioMasajePareja.id, 'relajacion');
-        contenedorMP.innerHTML = `
-          <div class="tarjeta centrado" style="margin-top:20px;">
-            <div style="font-size:40px;">✅</div>
-            <h2>¡Listo!</h2>
-            <p class="texto-suave">Disfruten un momento de calma después de esta sesión.</p>
-          </div>
-          <div class="tarjeta tarjeta-lavanda">
-            <span class="etiqueta-info" style="color:var(--negro); font-weight:700; font-size:13px; text-transform:uppercase; display:block; margin-bottom:6px;">Tip de autocuidado de hoy</span>
-            <h3 style="margin-top:0;">${bebida.nombre}</h3>
-            <p style="margin-bottom:6px;">${bebida.detalle}</p>
-            <p class="texto-suave" style="margin-bottom:0;">Esto no reemplaza tratamiento médico — si tienen dudas, consulten a su médico.</p>
-          </div>
-          <a href="inicio.html" class="boton boton-primario" style="margin-bottom:10px;">Volver a Inicio</a>
-          <a href="pareja.html" class="boton boton-secundario">Ver otro masaje</a>
-        `;
-      });
+      if (masajePareja.pasos) {
+        pasoIndiceMP = 0;
+        iniciarPasoActualMP();
+        renderTecnicaMP();
+      } else {
+        document.getElementById('boton-hecho-mp').addEventListener('click', finalizarMasajePareja);
+      }
     }
 
     (async function iniciar() {
