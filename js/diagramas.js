@@ -80,11 +80,15 @@ function dibujarFlechaTrayecto(x1, y1, x2, y2, tipoMovimiento) {
     forma = `<path id="${idTrayecto}" d="M${x1} ${y1} A${r} ${r} 0 0 1 ${x2} ${y2}" fill="none" stroke="${NEGRO}" stroke-width="1.3" stroke-linecap="round" marker-end="url(#${idFlecha})" />`;
     mano = `<g opacity="0.85">${iconoMano}<animateMotion dur="2.2s" repeatCount="indefinite" rotate="auto"><mpath href="#${idTrayecto}" /></animateMotion></g>`;
   } else if (tipoMovimiento === 'sostener') {
+    // "Sostener": pulso suave y parejo, como mantener la presión quieta.
     forma = `<circle cx="${x2}" cy="${y2}" r="13" fill="none" stroke="${NEGRO}" stroke-width="1.3" stroke-dasharray="2.5 3.5" />`;
-    mano = `<g transform="translate(${x2} ${y2})"><g opacity="0.85">${iconoMano}<animateTransform attributeName="transform" type="scale" values="1;1.18;1" dur="1.6s" repeatCount="indefinite" /></g></g>`;
+    mano = `<g transform="translate(${x2} ${y2})"><g opacity="0.85">${iconoMano}<animateTransform attributeName="transform" type="scale" values="1;1.12;1" dur="1.8s" repeatCount="indefinite" /></g></g>`;
   } else {
+    // "Presionar": la mano se aplana un poco hacia abajo, como si empujara
+    // contra la piel, y luego se suelta — distinto del pulso parejo de
+    // "sostener", para que se note que aquí sí hay presión activa.
     forma = `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${NEGRO}" stroke-width="1.3" stroke-linecap="round" marker-end="url(#${idFlecha})" />`;
-    mano = `<g transform="translate(${x2} ${y2})"><g opacity="0.85">${iconoMano}<animateTransform attributeName="transform" type="scale" values="1;1.18;1" dur="1.4s" repeatCount="indefinite" /></g></g>`;
+    mano = `<g transform="translate(${x2} ${y2})"><g opacity="0.85">${iconoMano}<animateTransform attributeName="transform" type="scale" values="1,1; 1.22,0.68; 1.22,0.68; 1,1" keyTimes="0; 0.35; 0.55; 1" dur="1.5s" repeatCount="indefinite" /></g></g>`;
   }
 
   return { defs, forma: forma + mano };
@@ -129,17 +133,22 @@ function dibujarRegion(x1, y1, x2, y2, opacidad) {
 const ZONA_MUSCULO = {
   trapecio: {
     imagen: 'images/musculo-trapecio.png',
+    // Coordenadas verificadas pixel a pixel contra el resplandor real de la
+    // foto (nunca a ojo): se mantienen siempre sobre el trapecio/occipital,
+    // lejos de la oreja y del lateral del cuello, siguiendo la recomendación
+    // de masoterapia de evitar el triángulo anterior/lateral (carótida,
+    // yugular) y trabajar solo la zona posterior segura.
     puntos: [
-      { t: { x1: 60, y1: 115, x2: 53, y2: 140 }, tipo: 'circular' },    // "entre el cuello y el hombro" (upper trapecio, fibras van del cráneo hacia el hombro)
-      { t: { x1: 68, y1: 92, x2: 60, y2: 108 }, tipo: 'presionar' },    // "borde lateral, cerca del cuello"
-      { t: { x1: 75, y1: 165, x2: 90, y2: 172 }, tipo: 'presionar' },   // "entre los omóplatos" (trapecio medio, más abajo)
-      { t: { x1: 70, y1: 188, x2: 85, y2: 198 }, tipo: 'presionar' },   // "borde interno del omóplato, más bajo" (trapecio inferior)
+      { t: { x1: 70, y1: 102, x2: 80, y2: 124 }, tipo: 'circular' },    // base del cráneo / trapecio superior, ya lejos de la oreja
+      { t: { x1: 78, y1: 120, x2: 87, y2: 138 }, tipo: 'presionar' },   // trapecio superior, hacia el cuello pero sobre el músculo, no sobre la oreja
+      { t: { x1: 88, y1: 139, x2: 96, y2: 157 }, tipo: 'presionar' },   // "entre los omóplatos" (trapecio medio, más abajo)
+      { t: { x1: 94, y1: 154, x2: 102, y2: 173 }, tipo: 'presionar' },  // "borde interno del omóplato, más bajo" (trapecio inferior)
     ],
     nivelPunto: [0, 1, 2, 3],
     // El trapecio es un músculo grande: esta línea tenue muestra que sigue
     // desde la base del cráneo hasta la mitad de la espalda (paravertebral),
     // aunque cada nivel solo trabaje un punto de ese recorrido.
-    contexto: [{ x: 64, y: 100 }, { x: 56.5, y: 127.5 }, { x: 82.5, y: 168.5 }, { x: 77.5, y: 193 }],
+    contexto: [{ x: 75.5, y: 113 }, { x: 82.5, y: 128.7 }, { x: 92, y: 147.8 }, { x: 98.1, y: 163.5 }, { x: 106, y: 182 }],
   },
   suboccipital: {
     imagen: 'images/musculo-suboccipital.png',
