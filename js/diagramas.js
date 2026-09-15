@@ -243,15 +243,16 @@ const ZONA_MUSCULO = {
   },
   piriforme: {
     imagen: 'images/musculo-piriforme.png',
-    // El nervio ciático baja por el centro del glúteo — nunca se debe
-    // presionar justo ahí. El punto principal se movió del "centro" hacia
-    // la franja diagonal real del piriforme (del sacro, medial y abajo, al
-    // hueso de la cadera, lateral y arriba), trabajando el músculo
-    // alrededor del nervio, no sobre él.
+    // Ilustración anatómica real (no foto), sin texto, mostrando el
+    // piriforme resaltado en naranja y el nervio ciático pasando justo por
+    // debajo. Coordenadas medidas pixel a pixel sobre la franja naranja del
+    // lado derecho de la imagen — con 3 puntos a lo largo del mismo músculo
+    // (borde cerca del sacro, centro, borde cerca de la cadera), nunca
+    // sobre el nervio.
     puntos: [
-      { t: { x1: 70, y1: 88, x2: 88, y2: 72 }, tipo: 'presionar' },     // franja del piriforme, sacro -> cadera, lejos del centro
-      { t: { x1: 95, y1: 65, x2: 105, y2: 75 }, tipo: 'presionar' },    // glúteo medio, punto alto (cerca del hueso de la cadera)
-      { t: { x1: 95, y1: 90, x2: 103, y2: 100 }, tipo: 'presionar' },   // glúteo medio, punto medio
+      { t: { x1: 98, y1: 85, x2: 106, y2: 95 }, tipo: 'presionar' },    // piriforme central
+      { t: { x1: 94, y1: 80, x2: 101, y2: 90 }, tipo: 'presionar' },    // piriforme, borde superior (cerca del sacro)
+      { t: { x1: 102, y1: 90, x2: 110, y2: 100 }, tipo: 'presionar' },  // piriforme, borde inferior (cerca del trocánter/cadera)
     ],
     nivelPunto: [0, 0, 1, 2],
   },

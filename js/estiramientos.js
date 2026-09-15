@@ -34,7 +34,7 @@ const ESTIRAMIENTOS = [
   },
   {
     id: 'cadera_est',
-    nombre: 'Cadera — figura 4 sentado',
+    nombre: 'Cadera — figura 4 (piriforme / falsa ciática)',
     premium: true,
     grupo: 'general',
     imagen: 'images/est-cadera.png',

@@ -58,7 +58,7 @@ const ZONAS = [
     ],
   },
   {
-    id: 'mandibula', nombre: 'Mandíbula (ATM / masetero)', bloque: 'Cuello y cabeza', premium: true, categoriaEmocional: true,
+    id: 'mandibula', nombre: 'Mandíbula (ATM / masetero)', bloque: 'Cuello y cabeza', premium: false, categoriaEmocional: true,
     porQue: 'El estrés y el bruxismo (apretar o rechinar los dientes) sobrecargan el masetero, el músculo principal para cerrar la mandíbula. El bruxismo casi siempre tiene una raíz emocional: ansiedad, estrés acumulado o una etapa de mucha exigencia personal.',
     datoClinico: 'El automasaje no alcanza los músculos más profundos de la mandíbula, por eso si hay chasquidos, bloqueos o dolor fuerte al abrir la boca, se necesita evaluación profesional.',
     evitarSi: 'Chasquidos o bloqueo al abrir la boca, dolor dental agudo, cirugía dental reciente.',
@@ -127,15 +127,15 @@ const ZONAS = [
 
   // ===== BLOQUE 3 — Cadera y glúteo =====
   {
-    id: 'piriforme', nombre: 'Glúteo / Piriforme', bloque: 'Cadera y glúteo', premium: false, categoriaEmocional: false,
-    porQue: 'El piriforme es un músculo pequeño y profundo del glúteo. Al contracturarse, puede atrapar el nervio ciático.',
-    datoClinico: 'Genera un patrón de dolor referido hacia la pierna muy parecido al de una hernia discal, sin serlo — se le conoce como "falsa ciática".',
+    id: 'piriforme', nombre: 'Piriforme (falsa ciática)', bloque: 'Cadera y glúteo', premium: true, categoriaEmocional: false, alcanceDificil: true,
+    porQue: 'El piriforme es un músculo pequeño y profundo del glúteo, justo por donde pasa el nervio ciático. Pasar muchas horas sentada, cruzar la pierna seguido o el estrés acumulado en la cadera lo contracturan — y al hacerlo, puede atrapar o irritar el nervio que tiene al lado.',
+    datoClinico: 'Cuando el piriforme atrapa el nervio ciático, genera un dolor que baja por el glúteo y la pierna casi idéntico al de una hernia discal, sin serlo — por eso se le conoce como "falsa ciática". Es una de las causas de dolor de pierna más comunes y menos diagnosticadas.',
     evitarSi: 'Dolor punzante y agudo al presionar (bajar la intensidad de inmediato), hernia discal sin autorización médica.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Piriforme central' },
       { numero: 2, diaOffset: 3, titulo: 'Piriforme central, más tiempo' },
-      { numero: 3, diaOffset: 7, titulo: 'Glúteo medio, punto alto', preguntaExtra: true },
-      { numero: 4, diaOffset: 14, titulo: 'Glúteo medio, punto medio', avanzado: true, preguntaExtra: true },
+      { numero: 3, diaOffset: 7, titulo: 'Borde superior, cerca del sacro', preguntaExtra: true },
+      { numero: 4, diaOffset: 14, titulo: 'Borde inferior, cerca de la cadera', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos)', esRutinaCompleta: true },
     ],
   },
