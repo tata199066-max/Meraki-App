@@ -27,6 +27,40 @@ let modo = 'niveles'; // niveles | checkin | checkinExtra | descanso | final
 let checkinRespuestaTemp = null;
 let bebidaElegida = null;
 
+/* ---------- Guía general de la técnica, según el tipo de movimiento ----------
+   No repite lo que ya dice el paso específico — explica de forma general
+   qué es un punto gatillo y cómo se siente, y cómo ejecutar cada tipo de
+   movimiento (por qué calentar, cómo sostener la presión y soltar, cómo
+   deslizar con presión media y cuántas veces repetir). */
+const GUIA_TECNICA = {
+  deslizar: '<strong>¿Por qué calentar primero?</strong> Deslizar antes de presionar prepara el músculo, mejora la circulación y hace que el punto de tensión duela menos al trabajarlo después. Desliza con una presión media y pareja, sin detenerte todavía en ningún punto — puedes repetir el recorrido 3 a 5 veces.',
+  circular: '<strong>¿Qué es un punto gatillo?</strong> Es una zona pequeña del músculo que se siente como una bolita o un nudo tenso al tocarla — ahí se concentra la tensión. Con las yemas de los dedos, haz círculos pequeños y firmes justo sobre ese punto, sin deslizarte hacia otro lado.',
+  sostener: '<strong>Cómo sostener la presión:</strong> cuando sientas la bolita o el punto tenso, presiona firme pero sin llegar a un dolor agudo — debe sentirse como "duele bien". Mantén esa presión contando los segundos del temporizador, y suelta poco a poco, sin quitar la mano de golpe.',
+  presionar: '<strong>Cómo hacer esta presión:</strong> baja con una presión media y constante hasta sentir el punto de tensión, sostén un momento ahí, y suelta despacio. Repite el mismo recorrido 3 a 5 veces, bajando la intensidad si sientes una molestia que se dispara hacia otra parte del cuerpo.',
+};
+
+/* ---------- Sonido de inicio/fin del temporizador ---------- */
+let contextoAudio = null;
+function reproducirTono(frecuencia, duracionMs, retrasoMs) {
+  setTimeout(() => {
+    try {
+      if (!contextoAudio) contextoAudio = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = contextoAudio.createOscillator();
+      const ganancia = contextoAudio.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = frecuencia;
+      ganancia.gain.setValueAtTime(0.15, contextoAudio.currentTime);
+      ganancia.gain.exponentialRampToValueAtTime(0.001, contextoAudio.currentTime + duracionMs / 1000);
+      osc.connect(ganancia);
+      ganancia.connect(contextoAudio.destination);
+      osc.start();
+      osc.stop(contextoAudio.currentTime + duracionMs / 1000);
+    } catch (e) { /* si el navegador bloquea el audio, seguimos sin sonido */ }
+  }, retrasoMs || 0);
+}
+function sonarInicio() { reproducirTono(880, 150, 0); }
+function sonarFin() { reproducirTono(660, 150, 0); reproducirTono(880, 250, 180); }
+
 function tieneAccesoPremium() {
   return usuarioZona.rol === 'admin' || usuarioZona.estado_suscripcion === 'activo';
 }
@@ -180,6 +214,7 @@ async function renderPrincipal() {
         </div>
         <h3>${paso.titulo}</h3>
         <p>${paso.detalle}</p>
+        <div class="tarjeta-guia-tecnica">${GUIA_TECNICA[tipoMovimiento]}</div>
         <div class="temporizador" id="texto-temporizador">${formatearTiempo(segundosRestantes || paso.segundos)}</div>
         <div class="controles-paso" style="margin-bottom:10px;">
           <button class="boton boton-secundario" id="boton-pausa">${enPausa ? 'Iniciar' : 'Pausar'}</button>
@@ -239,6 +274,7 @@ function detenerTemporizador() {
 function alternarPausa() {
   if (enPausa) {
     enPausa = false;
+    sonarInicio();
     document.getElementById('boton-pausa').textContent = 'Pausar';
     temporizadorId = setInterval(() => {
       segundosRestantes--;
@@ -247,6 +283,9 @@ function alternarPausa() {
       if (segundosRestantes <= 0) {
         detenerTemporizador();
         enPausa = true;
+        sonarFin();
+        const elBoton = document.getElementById('boton-pausa');
+        if (elBoton) elBoton.textContent = 'Iniciar';
       }
     }, 1000);
   } else {
