@@ -49,6 +49,7 @@ function trayectoOndulado(x1, y1, x2, y2, amplitud) {
 */
 function dibujarFlechaTrayecto(x1, y1, x2, y2, tipoMovimiento) {
   const idFlecha = 'flecha-' + Math.round(x1) + '-' + Math.round(y1) + '-' + Math.round(x2) + '-' + Math.round(y2) + '-' + tipoMovimiento;
+  const idTrayecto = idFlecha + '-ruta';
 
   const defs = `
     <marker id="${idFlecha}" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
@@ -56,19 +57,37 @@ function dibujarFlechaTrayecto(x1, y1, x2, y2, tipoMovimiento) {
     </marker>
   `;
 
+  // Icono de mano muy simple (palma + 4 dedos), dibujado en código, sin foto
+  // ni video — se anima recorriendo el trayecto (deslizar/circular) o
+  // pulsando en el punto (presionar/sostener) para mostrar movimiento real
+  // de la técnica sin costo de generar imágenes nuevas.
+  const iconoMano = `
+    <ellipse cx="0" cy="1.5" rx="2.6" ry="3.2" fill="none" stroke="${NEGRO}" stroke-width="1" />
+    <line x1="-1.6" y1="-1.2" x2="-1.8" y2="-3.4" stroke="${NEGRO}" stroke-width="0.9" stroke-linecap="round" />
+    <line x1="-0.4" y1="-1.8" x2="-0.5" y2="-4.2" stroke="${NEGRO}" stroke-width="0.9" stroke-linecap="round" />
+    <line x1="0.8" y1="-1.8" x2="1.0" y2="-4.1" stroke="${NEGRO}" stroke-width="0.9" stroke-linecap="round" />
+    <line x1="1.9" y1="-1.0" x2="2.6" y2="-2.8" stroke="${NEGRO}" stroke-width="0.9" stroke-linecap="round" />
+  `;
+
   let forma = '';
+  let mano = '';
+
   if (tipoMovimiento === 'deslizar') {
-    forma = `<path d="${trayectoOndulado(x1, y1, x2, y2, 7)}" fill="none" stroke="${NEGRO}" stroke-width="1.3" stroke-linecap="round" marker-end="url(#${idFlecha})" />`;
+    forma = `<path id="${idTrayecto}" d="${trayectoOndulado(x1, y1, x2, y2, 7)}" fill="none" stroke="${NEGRO}" stroke-width="1.3" stroke-linecap="round" marker-end="url(#${idFlecha})" />`;
+    mano = `<g opacity="0.85">${iconoMano}<animateMotion dur="2.4s" repeatCount="indefinite" rotate="auto"><mpath href="#${idTrayecto}" /></animateMotion></g>`;
   } else if (tipoMovimiento === 'circular') {
     const r = Math.max(distancia(x1, y1, x2, y2) * 0.62, 10);
-    forma = `<path d="M${x1} ${y1} A${r} ${r} 0 0 1 ${x2} ${y2}" fill="none" stroke="${NEGRO}" stroke-width="1.3" stroke-linecap="round" marker-end="url(#${idFlecha})" />`;
+    forma = `<path id="${idTrayecto}" d="M${x1} ${y1} A${r} ${r} 0 0 1 ${x2} ${y2}" fill="none" stroke="${NEGRO}" stroke-width="1.3" stroke-linecap="round" marker-end="url(#${idFlecha})" />`;
+    mano = `<g opacity="0.85">${iconoMano}<animateMotion dur="2.2s" repeatCount="indefinite" rotate="auto"><mpath href="#${idTrayecto}" /></animateMotion></g>`;
   } else if (tipoMovimiento === 'sostener') {
     forma = `<circle cx="${x2}" cy="${y2}" r="13" fill="none" stroke="${NEGRO}" stroke-width="1.3" stroke-dasharray="2.5 3.5" />`;
+    mano = `<g transform="translate(${x2} ${y2})"><g opacity="0.85">${iconoMano}<animateTransform attributeName="transform" type="scale" values="1;1.18;1" dur="1.6s" repeatCount="indefinite" /></g></g>`;
   } else {
     forma = `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${NEGRO}" stroke-width="1.3" stroke-linecap="round" marker-end="url(#${idFlecha})" />`;
+    mano = `<g transform="translate(${x2} ${y2})"><g opacity="0.85">${iconoMano}<animateTransform attributeName="transform" type="scale" values="1;1.18;1" dur="1.4s" repeatCount="indefinite" /></g></g>`;
   }
 
-  return { defs, forma };
+  return { defs, forma: forma + mano };
 }
 
 /* Línea de contexto: muy tenue y punteada, sin flecha protagonista, que
