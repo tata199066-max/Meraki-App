@@ -204,9 +204,26 @@ const ZONA_MUSCULO = {
   },
   lumbar: {
     imagen: 'images/musculo-lumbar.png',
+    // Nunca una sola flecha cruzando por encima de la columna: cada lado se
+    // trabaja por separado, con su propia flecha, siguiendo la dirección
+    // real de las fibras (paravertebral: vertical, arriba/abajo; cuadrado
+    // lumbar: hacia fuera, de la columna hacia la cadera). Verificado contra
+    // fuentes de fisioterapia sobre automasaje lumbar.
     puntos: [
-      { t: { x1: 35, y1: 165, x2: 100, y2: 180 }, tipo: 'presionar' },  // a los lados de la columna, bilateral
-      { t: { x1: 25, y1: 185, x2: 40, y2: 198 }, tipo: 'presionar' },   // cerca de la cresta de la cadera
+      {
+        t: [
+          { x1: 64, y1: 155, x2: 61, y2: 179 },   // paravertebral, lado izquierdo (de la persona)
+          { x1: 82, y1: 155, x2: 85, y2: 179 },   // paravertebral, lado derecho — nunca cruza la columna
+        ],
+        tipo: 'presionar',
+      },
+      {
+        t: [
+          { x1: 68, y1: 178, x2: 58, y2: 189 },   // cuadrado lumbar, lado izquierdo, hacia la cresta ilíaca
+          { x1: 78, y1: 178, x2: 88, y2: 189 },   // cuadrado lumbar, lado derecho
+        ],
+        tipo: 'presionar',
+      },
     ],
     nivelPunto: [0, 0, 1, 1],
   },
@@ -282,6 +299,22 @@ function puntoParaNivel(cfg, numeroNivel) {
   return cfg.puntos[indice];
 }
 
+/* Algunas técnicas necesitan más de una flecha en la misma foto (por
+   ejemplo, trabajar los dos lados de la columna por separado, nunca
+   cruzando por encima de ella) — `punto.t` puede ser un solo trayecto o
+   una lista de trayectos, y aquí se dibujan todos juntos. */
+function dibujarPunto(punto, opacidadRegion, tipoOverride) {
+  const lista = Array.isArray(punto.t) ? punto.t : [punto.t];
+  let defs = '';
+  let capas = '';
+  lista.forEach((t) => {
+    const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, tipoOverride || punto.tipo);
+    defs += flecha.defs;
+    capas += dibujarRegion(t.x1, t.y1, t.x2, t.y2, opacidadRegion) + flecha.forma;
+  });
+  return { defs, capas };
+}
+
 function generarDiagramaMusculo(zonaId, numeroNivel, tipoMovimientoOverride) {
   const cfg = ZONA_MUSCULO[zonaId];
   if (!cfg) {
@@ -295,17 +328,15 @@ function generarDiagramaMusculo(zonaId, numeroNivel, tipoMovimientoOverride) {
   if (esRutinaCompleta) {
     // Rutina completa: se muestran todos los puntos distintos de la zona a la vez.
     cfg.puntos.forEach((punto) => {
-      const t = punto.t;
-      const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, punto.tipo);
-      defs += flecha.defs;
-      capas += dibujarRegion(t.x1, t.y1, t.x2, t.y2, 0.22) + flecha.forma;
+      const dibujo = dibujarPunto(punto, 0.22);
+      defs += dibujo.defs;
+      capas += dibujo.capas;
     });
   } else {
     const punto = puntoParaNivel(cfg, numeroNivel);
-    const t = punto.t;
-    const flecha = dibujarFlechaTrayecto(t.x1, t.y1, t.x2, t.y2, tipoMovimientoOverride || punto.tipo);
-    defs = flecha.defs;
-    capas = dibujarLineaContexto(cfg.contexto) + dibujarRegion(t.x1, t.y1, t.x2, t.y2) + flecha.forma;
+    const dibujo = dibujarPunto(punto, undefined, tipoMovimientoOverride);
+    defs = dibujo.defs;
+    capas = dibujarLineaContexto(cfg.contexto) + dibujo.capas;
   }
 
   return `
