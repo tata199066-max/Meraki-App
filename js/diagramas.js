@@ -218,23 +218,29 @@ const ZONA_MUSCULO = {
   },
   lumbar: {
     imagen: 'images/musculo-lumbar.png',
+    // Corregido: el movimiento real del automasaje lumbar NO es vertical
+    // (arriba/abajo sobre la columna) — es horizontal, de la columna hacia
+    // afuera (hacia el costado/abdomen), siguiendo la dirección real de las
+    // fibras del cuadrado lumbar y los paravertebrales en ese sentido.
     // Nunca una sola flecha cruzando por encima de la columna: cada lado se
-    // trabaja por separado, con su propia flecha, siguiendo la dirección
-    // real de las fibras (paravertebral: vertical, arriba/abajo; cuadrado
-    // lumbar: hacia fuera, de la columna hacia la cadera). Verificado contra
-    // fuentes de fisioterapia sobre automasaje lumbar.
+    // trabaja por separado, con su propia flecha.
+    // Dos franjas horizontales, para cubrir desde la zona alta lumbar hasta
+    // donde el cuadrado lumbar termina y empieza el glúteo (verificado en la
+    // foto: los "hoyuelos" de la base de la espalda, a la altura de la
+    // cresta ilíaca, caen cerca de x=52/102, y=174 en este viewBox — justo
+    // el destino de la segunda franja, más baja).
     puntos: [
       {
         t: [
-          { x1: 64, y1: 155, x2: 61, y2: 179 },   // paravertebral, lado izquierdo (de la persona)
-          { x1: 82, y1: 155, x2: 85, y2: 179 },   // paravertebral, lado derecho — nunca cruza la columna
+          { x1: 70, y1: 158, x2: 50, y2: 162 },   // franja alta, lado izquierdo — columna hacia afuera
+          { x1: 80, y1: 158, x2: 100, y2: 162 },  // franja alta, lado derecho — nunca cruza la columna
         ],
         tipo: 'presionar',
       },
       {
         t: [
-          { x1: 68, y1: 178, x2: 58, y2: 189 },   // cuadrado lumbar, lado izquierdo, hacia la cresta ilíaca
-          { x1: 78, y1: 178, x2: 88, y2: 189 },   // cuadrado lumbar, lado derecho
+          { x1: 68, y1: 178, x2: 50, y2: 182 },   // franja baja, lado izquierdo — hacia la cresta ilíaca / inicio del glúteo
+          { x1: 82, y1: 178, x2: 100, y2: 182 },  // franja baja, lado derecho
         ],
         tipo: 'presionar',
       },

@@ -38,9 +38,9 @@ const ZONAS = [
     evitarSi: 'Mareo al presionar, dolor que se dispara con la presión, cualquier golpe reciente en la zona.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Borde óseo, primer contacto' },
-      { numero: 2, diaOffset: 3, titulo: 'Profundizando en el mismo borde' },
+      { numero: 2, diaOffset: 3, titulo: 'Mismo borde, con fricción circular' },
       { numero: 3, diaOffset: 7, titulo: 'Punto lateral', preguntaExtra: true },
-      { numero: 4, diaOffset: 14, titulo: 'Punto lateral, más profundo', avanzado: true, preguntaExtra: true },
+      { numero: 4, diaOffset: 14, titulo: 'Punto lateral, con movimiento acompañado', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (ambos lados)', esRutinaCompleta: true },
     ],
   },
@@ -51,7 +51,7 @@ const ZONAS = [
     evitarSi: 'Heridas o infecciones en el cuero cabelludo, dolor de cabeza súbito y muy intenso (requiere evaluación médica).',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Temporal, primer contacto' },
-      { numero: 2, diaOffset: 3, titulo: 'Profundizando en la sien' },
+      { numero: 2, diaOffset: 3, titulo: 'Sien, presión punto por punto' },
       { numero: 3, diaOffset: 7, titulo: 'Punto posterior', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Sien + mandíbula combinadas', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (sien + mandíbula)', esRutinaCompleta: true },
@@ -64,7 +64,7 @@ const ZONAS = [
     evitarSi: 'Chasquidos o bloqueo al abrir la boca, dolor dental agudo, cirugía dental reciente.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Masetero superficial' },
-      { numero: 2, diaOffset: 3, titulo: 'Masetero, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Masetero, presión con pulsos' },
       { numero: 3, diaOffset: 7, titulo: 'Masetero profundo', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Punto profundo en movimiento', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (superficial + profundo + sien)', esRutinaCompleta: true },
@@ -79,7 +79,7 @@ const ZONAS = [
     evitarSi: 'Hombro congelado diagnosticado, luxación reciente, dolor agudo al levantar el brazo.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Fibras externas y medias' },
-      { numero: 2, diaOffset: 3, titulo: 'Fibras medias, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Fibras medias, amasando' },
       { numero: 3, diaOffset: 7, titulo: 'Fibras anteriores', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Fibras posteriores', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 porciones)', esRutinaCompleta: true },
@@ -92,7 +92,7 @@ const ZONAS = [
     evitarSi: 'Nunca presionar directo sobre el borde óseo de la escápula, solo sobre el músculo.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Borde interno' },
-      { numero: 2, diaOffset: 3, titulo: 'Borde interno, más presión' },
+      { numero: 2, diaOffset: 3, titulo: 'Borde interno, con fricción transversal' },
       { numero: 3, diaOffset: 7, titulo: 'Punto superior', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Elevador de la escápula', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (ambos puntos)', esRutinaCompleta: true },
@@ -105,7 +105,7 @@ const ZONAS = [
     evitarSi: 'Dolor agudo tipo "punzada" al respirar hondo (puede ser otra causa, no muscular).',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Primer contacto' },
-      { numero: 2, diaOffset: 3, titulo: 'Profundizando' },
+      { numero: 2, diaOffset: 3, titulo: 'Primer contacto, con amasamiento' },
       { numero: 3, diaOffset: 7, titulo: 'Borde externo (cerca de la axila)', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Ángulo inferior del omóplato', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos)', esRutinaCompleta: true },
@@ -118,9 +118,9 @@ const ZONAS = [
     evitarSi: 'Dolor que baja como un rayo hacia la pierna (posible compromiso del nervio ciático) — ahí no se automasajea, se consulta primero.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'A los lados de la columna' },
-      { numero: 2, diaOffset: 3, titulo: 'Más tiempo por lado' },
+      { numero: 2, diaOffset: 3, titulo: 'A los lados de la columna, con pulsos' },
       { numero: 3, diaOffset: 7, titulo: 'Punto cerca de la cadera', preguntaExtra: true },
-      { numero: 4, diaOffset: 14, titulo: 'Mismo punto, más profundo', avanzado: true, preguntaExtra: true },
+      { numero: 4, diaOffset: 14, titulo: 'Punto cerca de la cadera, con movimiento acompañado', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (ambos lados)', esRutinaCompleta: true },
     ],
   },
@@ -133,7 +133,7 @@ const ZONAS = [
     evitarSi: 'Dolor punzante y agudo al presionar (bajar la intensidad de inmediato), hernia discal sin autorización médica.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Piriforme central' },
-      { numero: 2, diaOffset: 3, titulo: 'Piriforme central, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Piriforme central, con pulsos' },
       { numero: 3, diaOffset: 7, titulo: 'Borde superior, cerca del sacro', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Borde inferior, cerca de la cadera', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos)', esRutinaCompleta: true },
@@ -148,7 +148,7 @@ const ZONAS = [
     evitarSi: 'Hinchazón marcada de un solo lado, calor local o dolor que no calza con cansancio normal — puede ser un tema circulatorio.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Gastrocnemio, ordeñe general' },
-      { numero: 2, diaOffset: 3, titulo: 'Ordeñe, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Gastrocnemio, amasando' },
       { numero: 3, diaOffset: 7, titulo: 'Gastrocnemio interno', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Sóleo (más profundo)', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos)', esRutinaCompleta: true },
@@ -161,7 +161,7 @@ const ZONAS = [
     evitarSi: 'Dolor agudo al primer paso de la mañana de forma repetida (trabajar con suavidad y consultar si no mejora).',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Talón hacia dedos' },
-      { numero: 2, diaOffset: 3, titulo: 'Talón hacia dedos, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Talón a dedos, con círculos' },
       { numero: 3, diaOffset: 7, titulo: 'Centro del arco', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Combinado con pantorrilla', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (pie + pantorrilla)', esRutinaCompleta: true },
@@ -176,7 +176,7 @@ const ZONAS = [
     evitarSi: 'Hormigueo, adormecimiento o "corrientazo" hacia los dedos (posible nervio comprometido).',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Extensores y flexores, general' },
-      { numero: 2, diaOffset: 3, titulo: 'Extensores y flexores, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Extensores y flexores, con fricción transversal' },
       { numero: 3, diaOffset: 7, titulo: 'Codo externo ("codo de tenista")', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Codo interno ("codo de golfista")', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (4 puntos)', esRutinaCompleta: true },
@@ -189,7 +189,7 @@ const ZONAS = [
     evitarSi: 'Hormigueo o adormecimiento hacia los dedos, hinchazón marcada en la muñeca.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Palma general' },
-      { numero: 2, diaOffset: 3, titulo: 'Palma, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Palma, con pulsos' },
       { numero: 3, diaOffset: 7, titulo: 'Base del pulgar', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Entre los huesos de los dedos', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (mano y muñeca)', esRutinaCompleta: true },
@@ -202,7 +202,7 @@ const ZONAS = [
     evitarSi: 'Cualquier dolor en el pecho que no sea claramente muscular (opresión, falta de aire) requiere atención médica inmediata, no automasaje.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Amasamiento general' },
-      { numero: 2, diaOffset: 3, titulo: 'Amasamiento, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Puntos concretos del pectoral' },
       { numero: 3, diaOffset: 7, titulo: 'Porción clavicular (parte alta)', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Pectoral menor (más profundo)', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos)', esRutinaCompleta: true },
@@ -215,7 +215,7 @@ const ZONAS = [
     evitarSi: 'Embarazo, dolor abdominal agudo, justo después de comer (esperar 1-2 horas), cualquier diagnóstico digestivo sin autorización médica.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Círculos generales' },
-      { numero: 2, diaOffset: 3, titulo: 'Círculos, más tiempo' },
+      { numero: 2, diaOffset: 3, titulo: 'Cuatro puntos alrededor del ombligo' },
       { numero: 3, diaOffset: 7, titulo: 'Debajo del esternón', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Debajo del ombligo', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos)', esRutinaCompleta: true },
