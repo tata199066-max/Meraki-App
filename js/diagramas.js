@@ -160,9 +160,13 @@ const ZONA_MUSCULO = {
   },
   temporal: {
     imagen: 'images/musculo-temporal.png',
+    // El músculo temporal está solo en la sien (entre la oreja y la
+    // esquina externa del ojo/ceja, dentro de la línea del cabello) — antes
+    // la flecha cruzaba toda la cara hasta la esquina del ojo, saliéndose
+    // del músculo y acercándose a la zona ocular, que no se debe presionar.
     puntos: [
-      { t: { x1: 38, y1: 31, x2: 111, y2: 68 }, tipo: 'circular' },     // recorrido línea del cabello -> esquina externa del ojo
-      { t: { x1: 30, y1: 78, x2: 42, y2: 90 }, tipo: 'presionar' },     // punto posterior, cerca de la línea del cabello, encima de la oreja
+      { t: { x1: 64, y1: 46, x2: 86, y2: 64 }, tipo: 'circular' },      // sien, dentro de la línea del cabello, lejos del ojo
+      { t: { x1: 62, y1: 72, x2: 72, y2: 82 }, tipo: 'presionar' },     // punto posterior, justo encima de la oreja
     ],
     nivelPunto: [0, 0, 1, 1],
   },
@@ -195,7 +199,17 @@ const ZONA_MUSCULO = {
   dorsal: {
     imagen: 'images/musculo-dorsal.png',
     puntos: [
-      { t: { x1: 70, y1: 118, x2: 95, y2: 140 }, tipo: 'presionar' },   // zona alta general
+      // "Zona alta general" cruzaba de un lado al otro pasando por encima de
+      // la columna — se separó en dos flechas, una por lado, siguiendo la
+      // fibra del dorsal ancho (de cerca de la columna hacia afuera y
+      // arriba, hacia la axila), igual que se corrigió en la lumbar.
+      {
+        t: [
+          { x1: 68, y1: 135, x2: 58, y2: 115 },
+          { x1: 82, y1: 135, x2: 92, y2: 115 },
+        ],
+        tipo: 'presionar',
+      },
       { t: { x1: 110, y1: 90, x2: 125, y2: 110 }, tipo: 'presionar' },  // borde externo, cerca de la axila
       { t: { x1: 78, y1: 135, x2: 90, y2: 148 }, tipo: 'presionar' },   // ángulo inferior del omóplato
     ],
@@ -229,8 +243,13 @@ const ZONA_MUSCULO = {
   },
   piriforme: {
     imagen: 'images/musculo-piriforme.png',
+    // El nervio ciático baja por el centro del glúteo — nunca se debe
+    // presionar justo ahí. El punto principal se movió del "centro" hacia
+    // la franja diagonal real del piriforme (del sacro, medial y abajo, al
+    // hueso de la cadera, lateral y arriba), trabajando el músculo
+    // alrededor del nervio, no sobre él.
     puntos: [
-      { t: { x1: 75, y1: 85, x2: 85, y2: 95 }, tipo: 'presionar' },     // centro del glúteo
+      { t: { x1: 70, y1: 88, x2: 88, y2: 72 }, tipo: 'presionar' },     // franja del piriforme, sacro -> cadera, lejos del centro
       { t: { x1: 95, y1: 65, x2: 105, y2: 75 }, tipo: 'presionar' },    // glúteo medio, punto alto (cerca del hueso de la cadera)
       { t: { x1: 95, y1: 90, x2: 103, y2: 100 }, tipo: 'presionar' },   // glúteo medio, punto medio
     ],
@@ -257,10 +276,14 @@ const ZONA_MUSCULO = {
   },
   antebrazo: {
     imagen: 'images/musculo-antebrazo.png',
+    // Los puntos de "codo" estaban puestos cerca de la muñeca (arriba en la
+    // foto) en vez de cerca del codo (abajo) — se corrigieron para que
+    // caigan justo en el codo, a cada lado, que es donde de verdad están
+    // el epicóndilo externo e interno.
     puntos: [
       { t: { x1: 90, y1: 90, x2: 60, y2: 160 }, tipo: 'deslizar' },     // extensores y flexores, muñeca -> codo
-      { t: { x1: 88, y1: 78, x2: 95, y2: 90 }, tipo: 'presionar' },     // codo externo ("codo de tenista")
-      { t: { x1: 70, y1: 78, x2: 65, y2: 90 }, tipo: 'presionar' },     // codo interno ("codo de golfista")
+      { t: { x1: 48, y1: 153, x2: 40, y2: 167 }, tipo: 'presionar' },   // codo externo ("codo de tenista")
+      { t: { x1: 68, y1: 153, x2: 76, y2: 167 }, tipo: 'presionar' },   // codo interno ("codo de golfista")
     ],
     nivelPunto: [0, 0, 1, 2],
     contexto: [{ x: 60, y: 160 }, { x: 75, y: 122 }, { x: 91.5, y: 84 }],
