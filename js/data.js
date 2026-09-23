@@ -38,6 +38,7 @@ async function obtenerPerfilUsuario(id) {
     id: data.id,
     nombre: data.nombre,
     email: data.email,
+    celular: data.celular,
     edad: data.edad,
     sexo: data.sexo,
     estatura: data.estatura,
@@ -49,11 +50,11 @@ async function obtenerPerfilUsuario(id) {
   };
 }
 
-async function registrarUsuario({ nombre, email, password }) {
+async function registrarUsuario({ nombre, email, password, celular }) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { nombre: nombre || '' } },
+    options: { data: { nombre: nombre || '', celular: celular || '' } },
   });
 
   if (error) {

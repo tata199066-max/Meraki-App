@@ -107,6 +107,7 @@
               <div>
                 <div class="nombre">${u.nombre || '(sin nombre)'}</div>
                 <div class="correo">${u.email}</div>
+                ${u.celular ? `<div class="correo">📱 ${u.celular}</div>` : ''}
                 <div class="meta">Registrado el ${formatearFecha(u.fecha_registro)}</div>
               </div>
               ${etiquetaEstado(u)}
