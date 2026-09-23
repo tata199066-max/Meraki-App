@@ -171,9 +171,7 @@
         <img src="${masajePareja.imagen}" alt="${masajePareja.nombre}" class="foto-tecnica" />
       `;
 
-      const avisoPremiumHtml = masajePareja.premium ? `
-        <div class="tarjeta-guia-tecnica" style="background:var(--dorado, #e8c874); opacity:0.85;">🔓 Este masaje pasará a ser de pago más adelante — por ahora lo estás viendo gratis mientras probamos la app.</div>
-      ` : '';
+      const avisoPremiumHtml = '';
 
       if (!puedeVer) {
         contenedorMP.innerHTML = encabezado + `
@@ -185,7 +183,7 @@
           </div>
         `;
         document.getElementById('boton-suscribirse-mp').addEventListener('click', () => {
-          alert('La suscripción de pago todavía no está activa en esta versión de prueba. Se conecta más adelante.');
+          window.open('https://pay.hotmart.com/K107739272J', '_blank');
         });
         return;
       }

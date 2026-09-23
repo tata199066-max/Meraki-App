@@ -46,19 +46,8 @@ function tieneAccesoPremium() {
   return usuarioZona.rol === 'admin' || usuarioZona.estado_suscripcion === 'activo';
 }
 
-/*
-  FASE DE PRUEBA GRATUITA: mientras se está probando la app con gente
-  conocida (antes de conectar el cobro), todas las zonas quedan abiertas
-  para que puedan ver la técnica completa y dar su opinión — en vez de
-  toparse con la pantalla de "Quiero suscribirme".
-
-  Cuando llegue el momento de activar el cobro de verdad: cambiar esta
-  función para que vuelva a usar tieneAccesoPremium(), y en Supabase
-  volver a poner tiene_suscripcion_activa() con su lógica real (ver
-  supabase/01_esquema_y_seguridad.sql).
-*/
 function puedeVerZona() {
-  return true;
+  return !zona.premium || tieneAccesoPremium();
 }
 
 async function render() {
@@ -92,9 +81,7 @@ function renderTarjetasInfo() {
     ? '<span class="etiqueta etiqueta-premium">Premium</span>'
     : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
 
-  const avisoPremium = zona.premium
-    ? `<div class="tarjeta-guia-tecnica" style="background:var(--dorado, #e8c874); opacity:0.85;">🔓 Esta zona pasará a ser de pago más adelante — por ahora la estás viendo gratis mientras probamos la app. Cuéntanos qué te parece.</div>`
-    : '';
+  const avisoPremium = '';
 
   let grafico = '';
   if (zona.categoriaEmocional) {
@@ -151,7 +138,7 @@ function renderCandado() {
     </div>
   `;
   document.getElementById('boton-suscribirse').addEventListener('click', () => {
-    alert('La suscripción de pago todavía no está activa en esta versión de prueba. Se conecta más adelante.');
+    window.open('https://pay.hotmart.com/K107739272J', '_blank');
   });
 }
 

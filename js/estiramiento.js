@@ -83,7 +83,7 @@ function renderCandadoEst() {
     </div>
   `;
   document.getElementById('boton-suscribirse-est').addEventListener('click', () => {
-    alert('La suscripción de pago todavía no está activa en esta versión de prueba. Se conecta más adelante.');
+    window.open('https://pay.hotmart.com/K107739272J', '_blank');
   });
 }
 
