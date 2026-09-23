@@ -88,6 +88,10 @@
         <p style="margin-bottom:0;">Todas las técnicas de Meraki se hacen con las manos como protagonistas. Herramientas como la pelota de tenis son solo una ayuda opcional, nunca el reemplazo de la técnica manual.</p>
       </div>
 
+      <button id="boton-instalar-app" class="boton boton-secundario" style="display:none; margin-top:4px; margin-bottom:16px; align-items:center; justify-content:center; gap:8px; width:100%;">
+        ⬇️ Descargar aplicación
+      </button>
+
       <div class="tarjeta">
         <span class="titulo-tarjeta">🔥 Calentar antes de presionar</span>
         <p style="margin-bottom:0;">Nunca empieces directo con presión fuerte sobre el punto de tensión. Calienta primero la zona con movimientos suaves de deslizamiento durante 15-20 segundos, y solo después avanza a la presión focal. Esto ya está incorporado como primer paso en cada técnica de la app.</p>
@@ -98,8 +102,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/instalar-app.js"></script>
   <script>
     requiereSesion().then(() => {});
+    configurarBotonInstalar('boton-instalar-app');
   </script>
 </body>
 </html>
