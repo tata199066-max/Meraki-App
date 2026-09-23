@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/meta-pixel.js"></script>
 </head>
 <body>
   <div class="pantalla">
@@ -184,6 +185,10 @@
         resultado = await registrarUsuario({ nombre, email, password, celular });
       } else {
         resultado = await iniciarSesion({ email, password });
+      }
+
+      if (modo === 'registro' && !resultado.error && typeof fbq === 'function') {
+        fbq('track', 'CompleteRegistration');
       }
 
       if (resultado.requiereConfirmacion) {
