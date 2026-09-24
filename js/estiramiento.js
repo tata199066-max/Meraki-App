@@ -83,7 +83,7 @@ function renderCandadoEst() {
     </div>
   `;
   document.getElementById('boton-suscribirse-est').addEventListener('click', () => {
-    window.open('https://pay.hotmart.com/K107739272J', '_blank');
+    window.open('https://pay.hotmart.com/K107739272J?checkoutMode=10', '_blank');
   });
 }
 
