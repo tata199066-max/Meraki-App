@@ -34,6 +34,19 @@ function hoyISO() {
 async function obtenerPerfilUsuario(id) {
   const { data, error } = await supabase.from('usuarios').select('*').eq('id', id).single();
   if (error || !data) return null;
+
+  // Si el plan (1 semana / 1 mes / 3 meses) ya venció, lo tratamos como
+  // vencido aquí mismo aunque la tarea diaria todavía no haya corrido —
+  // así el acceso siempre es correcto al instante.
+  let estadoSuscripcion = data.estado_suscripcion;
+  if (
+    estadoSuscripcion === 'activo' &&
+    data.fecha_expiracion_premium &&
+    new Date(data.fecha_expiracion_premium) < new Date()
+  ) {
+    estadoSuscripcion = 'vencido';
+  }
+
   return {
     id: data.id,
     nombre: data.nombre,
@@ -45,7 +58,8 @@ async function obtenerPerfilUsuario(id) {
     peso: data.peso,
     ocupacion: data.ocupacion,
     rol: data.rol,
-    estado_suscripcion: data.estado_suscripcion,
+    estado_suscripcion: estadoSuscripcion,
+    fecha_expiracion_premium: data.fecha_expiracion_premium,
     fecha_registro: data.fecha_registro,
   };
 }

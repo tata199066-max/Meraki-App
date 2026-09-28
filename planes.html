@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
+  <link rel="apple-touch-icon" href="images/icono-apple-touch.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#f0e5cf" />
+  <title>Meraki App — Tu plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .planes-envoltura {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+    .planes-encabezado { text-align: center; margin-bottom: 18px; }
+    .planes-encabezado h1 {
+      font-family: var(--fuente-titulo);
+      font-size: 24px;
+      margin: 10px 0 6px;
+    }
+    .planes-encabezado p { color: #5c5648; font-size: 15px; }
+
+    .cupon-caja {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #e7ede0;
+      border: 1.5px solid #b9cdae;
+      border-radius: var(--radio);
+      padding: 14px 16px;
+      margin: 18px 0;
+    }
+    .cupon-caja .cupon-texto { font-size: 13px; color: #3f4a37; }
+    .cupon-caja .cupon-codigo { font-weight: 700; color: var(--verde-oscuro); }
+    .cupon-caja .cupon-tiempo {
+      background: var(--verde);
+      color: #fff;
+      font-weight: 700;
+      font-family: var(--fuente-titulo);
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .plan-tarjeta {
+      position: relative;
+      display: block;
+      background: #fff;
+      border: 2px solid #e3dccf;
+      border-radius: var(--radio);
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: border-color .15s ease;
+    }
+    .plan-tarjeta.seleccionada { border-color: var(--verde); }
+    .plan-tarjeta input { position: absolute; opacity: 0; }
+    .plan-fila { display: flex; align-items: center; justify-content: space-between; }
+    .plan-izquierda { display: flex; align-items: center; gap: 12px; }
+    .plan-radio {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid #cfc6b4; flex: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .plan-tarjeta.seleccionada .plan-radio { border-color: var(--verde); }
+    .plan-tarjeta.seleccionada .plan-radio::after {
+      content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--verde);
+    }
+    .plan-nombre { font-weight: 700; font-size: 16px; }
+    .plan-badge {
+      display: inline-block; background: var(--verde); color: #fff;
+      font-size: 11px; font-weight: 700; border-radius: 8px;
+      padding: 2px 7px; margin-top: 4px;
+    }
+    .plan-precios { text-align: right; }
+    .plan-precio-actual { font-family: var(--fuente-titulo); font-size: 19px; font-weight: 600; }
+    .plan-precio-anterior { font-size: 13px; color: #a39d8d; text-decoration: line-through; }
+
+    .plan-popular {
+      position: absolute; top: -12px; left: 18px;
+      background: var(--negro); color: #f0e5cf;
+      font-size: 11px; font-weight: 700; letter-spacing: .02em;
+      border-radius: 10px; padding: 3px 10px;
+    }
+
+    .boton-quiero-plan {
+      width: 100%; margin-top: 6px;
+    }
+
+    .planes-nota {
+      text-align: center; font-size: 12px; color: #8a8474;
+      margin-top: 14px; line-height: 1.5;
+    }
+
+    .planes-omitir {
+      display: block; text-align: center; margin-top: 22px;
+      font-size: 13px; color: #8a8474; text-decoration: underline;
+    }
+  </style>
+  <script src="js/meta-pixel.js"></script>
+</head>
+<body>
+  <div class="pantalla">
+    <div class="planes-envoltura">
+      <div class="planes-encabezado">
+        <div class="marca" style="justify-content:center; display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+          <img src="images/icono-apple-touch.png" alt="Meraki" style="width:32px; height:32px; border-radius:8px;" />
+        </div>
+        <h1 id="titulo-plan">Tu plan está listo</h1>
+        <p id="subtitulo-plan">Con base en lo que nos contaste, armamos una rutina para ti.</p>
+      </div>
+
+      <div class="cupon-caja">
+        <div class="cupon-texto">
+          Cupón aplicado <span class="cupon-codigo" id="codigo-cupon"></span>
+        </div>
+        <div class="cupon-tiempo" id="reloj-cupon">10:00</div>
+      </div>
+
+      <label class="plan-tarjeta" id="tarjeta-semana">
+        <input type="radio" name="plan" value="semana" />
+        <div class="plan-fila">
+          <div class="plan-izquierda">
+            <div class="plan-radio"></div>
+            <div>
+              <div class="plan-nombre">1 semana</div>
+              <div class="plan-badge">50% OFF</div>
+            </div>
+          </div>
+          <div class="plan-precios">
+            <div class="plan-precio-actual">$12.417 COP</div>
+            <div class="plan-precio-anterior">$24.834 COP</div>
+          </div>
+        </div>
+      </label>
+
+      <label class="plan-tarjeta seleccionada" id="tarjeta-mes">
+        <span class="plan-popular">MÁS POPULAR</span>
+        <input type="radio" name="plan" value="mes" checked />
+        <div class="plan-fila">
+          <div class="plan-izquierda">
+            <div class="plan-radio"></div>
+            <div>
+              <div class="plan-nombre">1 mes</div>
+              <div class="plan-badge">50% OFF</div>
+            </div>
+          </div>
+          <div class="plan-precios">
+            <div class="plan-precio-actual">$21.310 COP</div>
+            <div class="plan-precio-anterior">$42.620 COP</div>
+          </div>
+        </div>
+      </label>
+
+      <label class="plan-tarjeta" id="tarjeta-3meses">
+        <input type="radio" name="plan" value="3meses" />
+        <div class="plan-fila">
+          <div class="plan-izquierda">
+            <div class="plan-radio"></div>
+            <div>
+              <div class="plan-nombre">3 meses</div>
+              <div class="plan-badge">50% OFF</div>
+            </div>
+          </div>
+          <div class="plan-precios">
+            <div class="plan-precio-actual">$46.212 COP</div>
+            <div class="plan-precio-anterior">$92.424 COP</div>
+          </div>
+        </div>
+      </label>
+
+      <button class="boton boton-primario boton-quiero-plan" id="boton-quiero-plan">Quiero mi plan</button>
+
+      <p class="planes-nota">
+        Al continuar aceptas que se procese tu pago de forma segura por Hotmart.
+        Es un pago único por el tiempo que elijas — no es una suscripción que se renueve sola.
+      </p>
+
+      <a href="inicio.html" class="planes-omitir">Seguir explorando gratis por ahora</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/data.js"></script>
+  <script>
+    const LINKS_PLAN = {
+      semana: 'https://pay.hotmart.com/K107739272J?off=1aojnyyo',
+      mes: 'https://pay.hotmart.com/K107739272J?off=lwnxxj9e',
+      '3meses': 'https://pay.hotmart.com/K107739272J?off=w1v09ikt',
+    };
+
+    const ETIQUETAS_ZONA = {
+      cuello: 'tu cuello', cabeza: 'tu cabeza', mandibula: 'tu mandíbula', hombros: 'tus hombros',
+      espalda_alta: 'tu espalda alta', espalda_media: 'tu espalda media', espalda_baja: 'tu espalda baja',
+      cadera: 'tu cadera', gluteos: 'tus glúteos', piernas: 'tus piernas', pantorrillas: 'tus pantorrillas',
+      pies: 'tus pies', brazos: 'tus brazos', antebrazos: 'tus antebrazos', manos: 'tus manos', abdomen: 'tu abdomen',
+    };
+
+    let planSeleccionado = 'mes';
+
+    document.querySelectorAll('.plan-tarjeta').forEach((tarjeta) => {
+      tarjeta.addEventListener('click', () => {
+        document.querySelectorAll('.plan-tarjeta').forEach(t => t.classList.remove('seleccionada'));
+        tarjeta.classList.add('seleccionada');
+        planSeleccionado = tarjeta.querySelector('input').value;
+      });
+    });
+
+    document.getElementById('boton-quiero-plan').addEventListener('click', () => {
+      window.open(LINKS_PLAN[planSeleccionado], '_blank');
+    });
+
+    // Cronómetro de 10 minutos (se reinicia cada vez que se entra a esta pantalla).
+    (function iniciarCronometro() {
+      let segundosRestantes = 10 * 60;
+      const el = document.getElementById('reloj-cupon');
+      const actualizar = () => {
+        const m = Math.floor(segundosRestantes / 60);
+        const s = segundosRestantes % 60;
+        el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+      };
+      actualizar();
+      setInterval(() => {
+        if (segundosRestantes > 0) {
+          segundosRestantes--;
+          actualizar();
+        }
+      }, 1000);
+    })();
+
+    (async function personalizar() {
+      const usuario = await obtenerUsuarioActual();
+      if (!usuario) return;
+
+      const primerNombre = (usuario.nombre || '').trim().split(' ')[0];
+      const hoy = new Date();
+      const codigo = `${primerNombre || 'Mary'}_${hoy.getDate()}${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][hoy.getMonth()]}${hoy.getFullYear()}`;
+      document.getElementById('codigo-cupon').textContent = codigo;
+
+      const resp = await obtenerRespuestasQuiz(usuario.id);
+      const zonas = resp && resp.zonas_dolor;
+      if (Array.isArray(zonas) && zonas.length > 0 && ETIQUETAS_ZONA[zonas[0]]) {
+        document.getElementById('subtitulo-plan').textContent =
+          `Armamos una rutina enfocada en ${ETIQUETAS_ZONA[zonas[0]]} — elige tu plan para empezar hoy.`;
+      }
+    })();
+  </script>
+</body>
+</html>
