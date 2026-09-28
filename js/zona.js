@@ -138,7 +138,7 @@ function renderCandado() {
     </div>
   `;
   document.getElementById('boton-suscribirse').addEventListener('click', () => {
-    window.open('https://pay.hotmart.com/K107739272J?checkoutMode=10', '_blank');
+    window.location.href = 'planes.html';
   });
 }
 
