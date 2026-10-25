@@ -121,6 +121,8 @@
     // La oferta termina el 15 de nov o cuando se agoten estos cupos, lo que pase primero.
     // Las compras de lanzamiento las cuenta el webhook en la tabla compras_lanzamiento.
     const TOTAL_CUPOS = 100;
+    const CUPOS_MOSTRAR_DESDE = 30; // el contador aparece cuando quedan 30 o menos
+    const CUPOS_ULTIMOS = 10;       // "¡Últimos N cupos!" cuando quedan 10 o menos
     let cuposAgotados = false;
 
     const BASE_PAGO = 'https://pay.hotmart.com/H107809141Y';
@@ -236,9 +238,15 @@
         if (data >= TOTAL_CUPOS) {
           cuposAgotados = true;
           document.getElementById('caja-oferta').style.display = 'none';
-        } else if (data > 0) {
-          document.getElementById('oferta-linea2').textContent =
-            `Quedan ${TOTAL_CUPOS - data} de ${TOTAL_CUPOS} cupos. Después sube de precio.`;
+        } else {
+          // El número solo se muestra cuando ya quedan pocos cupos de verdad.
+          const restantes = TOTAL_CUPOS - data;
+          const linea2 = document.getElementById('oferta-linea2');
+          if (restantes <= CUPOS_ULTIMOS) {
+            linea2.textContent = `¡Últimos ${restantes} cupos! Después sube de precio.`;
+          } else if (restantes <= CUPOS_MOSTRAR_DESDE) {
+            linea2.textContent = `Quedan ${restantes} cupos. Después sube de precio.`;
+          }
         }
         dibujarPlanes();
       } catch (e) { /* si no se puede leer el contador, se muestra la oferta por fecha */ }
