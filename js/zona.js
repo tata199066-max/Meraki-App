@@ -132,9 +132,9 @@ function renderCandado() {
   contenedor.innerHTML = renderTarjetasInfo() + `
     <div class="tarjeta candado">
       <div class="icono-candado">🔒</div>
-      <h3>Esta zona es Premium</h3>
-      <p class="texto-suave">Suscríbete para desbloquearla y ver la técnica paso a paso.</p>
-      <button class="boton boton-primario" id="boton-suscribirse" style="margin-top:8px;">Quiero suscribirme</button>
+      <h3>Desbloquea la técnica de esta zona</h3>
+      <p class="texto-suave">La técnica paso a paso, con foto de cada paso y cronómetro. Pago único, no se renueva solo.</p>
+      <button class="boton boton-primario" id="boton-suscribirse" style="margin-top:8px;">Ver planes</button>
     </div>
   `;
   document.getElementById('boton-suscribirse').addEventListener('click', () => {

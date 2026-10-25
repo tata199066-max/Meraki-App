@@ -150,10 +150,27 @@
           zonaRecomendada = ZONAS.find(z => !z.premium);
         }
 
+        // Quien aún no tiene acceso premium empieza por una zona gratis (la primera vez
+        // que toca "Empezar ahora" debe funcionar), y su zona ideal queda como siguiente paso.
+        const tieneAccesoInicio = usuarioInicio.rol === 'admin' || usuarioInicio.estado_suscripcion === 'activo';
+        let zonaPremiumSiguiente = null;
+        if (zonaRecomendada.premium && !tieneAccesoInicio) {
+          zonaPremiumSiguiente = zonaRecomendada;
+          zonaRecomendada =
+            ZONAS.find(z => !z.premium && z.bloque === zonaPremiumSiguiente.bloque) ||
+            ZONAS.find(z => z.id === 'trapecio') ||
+            ZONAS.find(z => !z.premium);
+        }
+
         const tarjeta = document.getElementById('tarjeta-recomendacion');
         const etiqueta = zonaRecomendada.premium
           ? '<span class="etiqueta etiqueta-premium">Premium</span>'
           : '<span class="etiqueta etiqueta-gratis">Gratis</span>';
+        const notaSiguiente = zonaPremiumSiguiente ? `
+          <p class="texto-suave" style="margin:14px 0 0; font-size:13px;">
+            Tu zona ideal es <strong>${zonaPremiumSiguiente.nombre}</strong> (Premium).
+            Empieza por esta y desbloquea la otra cuando quieras.
+          </p>` : '';
         tarjeta.innerHTML = `
           <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
             <h3 style="margin-bottom:0;">${zonaRecomendada.nombre}</h3>
@@ -161,6 +178,7 @@
           </div>
           <p class="texto-suave" style="margin-bottom:14px;">${zonaRecomendada.porQue}</p>
           <a href="zona.html?id=${zonaRecomendada.id}" class="boton boton-primario">Empezar ahora</a>
+          ${notaSiguiente}
         `;
 
         await renderTarjetasExtra(usuarioInicio, dias);

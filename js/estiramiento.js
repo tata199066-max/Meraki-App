@@ -77,9 +77,9 @@ function renderCandadoEst() {
   contenedorEst.innerHTML = renderEncabezadoEst() + `
     <div class="tarjeta candado">
       <div class="icono-candado">🔒</div>
-      <h3>Este estiramiento es Premium</h3>
-      <p class="texto-suave">Suscríbete para desbloquearlo.</p>
-      <button class="boton boton-primario" id="boton-suscribirse-est" style="margin-top:8px;">Quiero suscribirme</button>
+      <h3>Desbloquea este estiramiento</h3>
+      <p class="texto-suave">Paso a paso, con cronómetro. Pago único, no se renueva solo.</p>
+      <button class="boton boton-primario" id="boton-suscribirse-est" style="margin-top:8px;">Ver planes</button>
     </div>
   `;
   document.getElementById('boton-suscribirse-est').addEventListener('click', () => {

@@ -13,61 +13,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
   <style>
-    .planes-envoltura {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 28px 20px 40px;
-    }
+    .planes-envoltura { max-width: 480px; margin: 0 auto; padding: 28px 20px 40px; }
     .planes-encabezado { text-align: center; margin-bottom: 18px; }
-    .planes-encabezado h1 {
-      font-family: var(--fuente-titulo);
-      font-size: 24px;
-      margin: 10px 0 6px;
-    }
+    .planes-encabezado h1 { font-family: var(--fuente-titulo); font-size: 24px; margin: 10px 0 6px; }
     .planes-encabezado p { color: #5c5648; font-size: 15px; }
 
-    .cupon-caja {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background: #e7ede0;
-      border: 1.5px solid #b9cdae;
-      border-radius: var(--radio);
-      padding: 14px 16px;
-      margin: 18px 0;
+    .oferta-caja {
+      background: #e7ede0; border: 1.5px solid #b9cdae; border-radius: var(--radio);
+      padding: 14px 16px; margin: 18px 0; text-align: center;
     }
-    .cupon-caja .cupon-texto { font-size: 13px; color: #3f4a37; }
-    .cupon-caja .cupon-codigo { font-weight: 700; color: var(--verde-oscuro); }
-    .cupon-caja .cupon-tiempo {
-      background: var(--verde);
-      color: #fff;
-      font-weight: 700;
-      font-family: var(--fuente-titulo);
-      border-radius: 12px;
-      padding: 6px 12px;
-      font-size: 15px;
-      white-space: nowrap;
+    .oferta-caja .oferta-texto { font-size: 13px; color: #3f4a37; font-weight: 700; }
+    .oferta-caja .oferta-reloj {
+      display: inline-block; margin-top: 8px; background: var(--verde); color: #fff;
+      font-weight: 700; font-family: var(--fuente-titulo); border-radius: 12px;
+      padding: 6px 14px; font-size: 17px; white-space: nowrap;
     }
 
     .plan-tarjeta {
-      position: relative;
-      display: block;
-      background: #fff;
-      border: 2px solid #e3dccf;
-      border-radius: var(--radio);
-      padding: 16px 18px;
-      margin-bottom: 14px;
-      cursor: pointer;
+      position: relative; display: block; background: #fff; border: 2px solid #e3dccf;
+      border-radius: var(--radio); padding: 16px 18px; margin-bottom: 16px; cursor: pointer;
       transition: border-color .15s ease;
     }
     .plan-tarjeta.seleccionada { border-color: var(--verde); }
     .plan-tarjeta input { position: absolute; opacity: 0; }
-    .plan-fila { display: flex; align-items: center; justify-content: space-between; }
+    .plan-fila { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .plan-izquierda { display: flex; align-items: center; gap: 12px; }
     .plan-radio {
-      width: 22px; height: 22px; border-radius: 50%;
-      border: 2px solid #cfc6b4; flex: none;
+      width: 22px; height: 22px; border-radius: 50%; border: 2px solid #cfc6b4; flex: none;
       display: flex; align-items: center; justify-content: center;
     }
     .plan-tarjeta.seleccionada .plan-radio { border-color: var(--verde); }
@@ -75,34 +47,31 @@
       content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--verde);
     }
     .plan-nombre { font-weight: 700; font-size: 16px; }
+    .plan-detalle { font-size: 12.5px; color: #6a6454; margin-top: 2px; }
     .plan-badge {
-      display: inline-block; background: var(--verde); color: #fff;
-      font-size: 11px; font-weight: 700; border-radius: 8px;
-      padding: 2px 7px; margin-top: 4px;
+      display: inline-block; background: var(--verde); color: #fff; font-size: 11px; font-weight: 700;
+      border-radius: 8px; padding: 2px 7px; margin-top: 4px;
     }
-    .plan-precios { text-align: right; }
-    .plan-precio-actual { font-family: var(--fuente-titulo); font-size: 19px; font-weight: 600; }
+    .plan-precios { text-align: right; flex: none; }
+    .plan-precio-actual { font-family: var(--fuente-titulo); font-size: 20px; font-weight: 600; }
     .plan-precio-anterior { font-size: 13px; color: #a39d8d; text-decoration: line-through; }
+    .plan-extra { margin-top: 10px; font-size: 12.5px; color: #3f4a37; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .plan-extra .ahorro { font-weight: 700; color: var(--verde-oscuro); }
 
-    .plan-popular {
-      position: absolute; top: -12px; left: 18px;
-      background: var(--negro); color: #f0e5cf;
-      font-size: 11px; font-weight: 700; letter-spacing: .02em;
-      border-radius: 10px; padding: 3px 10px;
+    .plan-etiqueta {
+      position: absolute; top: -12px; left: 18px; background: var(--negro); color: #f0e5cf;
+      font-size: 11px; font-weight: 700; letter-spacing: .02em; border-radius: 10px; padding: 3px 10px;
     }
 
-    .boton-quiero-plan {
-      width: 100%; margin-top: 6px;
+    .boton-quiero-plan { width: 100%; margin-top: 6px; }
+    .planes-nota { text-align: center; font-size: 12px; color: #6f6959; margin-top: 14px; line-height: 1.55; }
+    .planes-aviso-correo {
+      background: #f6efdf; border-radius: 10px; padding: 10px 12px; margin-top: 14px;
+      font-size: 12.5px; color: #4a4536; text-align: center;
     }
-
-    .planes-nota {
-      text-align: center; font-size: 12px; color: #8a8474;
-      margin-top: 14px; line-height: 1.5;
-    }
-
     .planes-omitir {
-      display: block; text-align: center; margin-top: 22px;
-      font-size: 13px; color: #8a8474; text-decoration: underline;
+      display: block; text-align: center; margin-top: 22px; font-size: 14px; color: #5c5648;
+      text-decoration: underline; padding: 10px;
     }
   </style>
   <script src="js/meta-pixel.js"></script>
@@ -118,70 +87,22 @@
         <p id="subtitulo-plan">Con base en lo que nos contaste, armamos una rutina para ti.</p>
       </div>
 
-      <div class="cupon-caja">
-        <div class="cupon-texto">
-          Cupón aplicado <span class="cupon-codigo" id="codigo-cupon"></span>
-        </div>
-        <div class="cupon-tiempo" id="reloj-cupon">10:00</div>
+      <div class="oferta-caja" id="caja-oferta">
+        <div class="oferta-texto">Precio de lanzamiento: termina el 30 de noviembre</div>
+        <div class="oferta-reloj" id="reloj-oferta">--</div>
       </div>
 
-      <label class="plan-tarjeta" id="tarjeta-semana">
-        <input type="radio" name="plan" value="semana" />
-        <div class="plan-fila">
-          <div class="plan-izquierda">
-            <div class="plan-radio"></div>
-            <div>
-              <div class="plan-nombre">1 semana</div>
-              <div class="plan-badge">50% OFF</div>
-            </div>
-          </div>
-          <div class="plan-precios">
-            <div class="plan-precio-actual">$11.947 COP</div>
-            <div class="plan-precio-anterior">$23.894 COP</div>
-          </div>
-        </div>
-      </label>
-
-      <label class="plan-tarjeta seleccionada" id="tarjeta-mes">
-        <span class="plan-popular">MÁS POPULAR</span>
-        <input type="radio" name="plan" value="mes" checked />
-        <div class="plan-fila">
-          <div class="plan-izquierda">
-            <div class="plan-radio"></div>
-            <div>
-              <div class="plan-nombre">1 mes</div>
-              <div class="plan-badge">50% OFF</div>
-            </div>
-          </div>
-          <div class="plan-precios">
-            <div class="plan-precio-actual">$20.504 COP</div>
-            <div class="plan-precio-anterior">$41.008 COP</div>
-          </div>
-        </div>
-      </label>
-
-      <label class="plan-tarjeta" id="tarjeta-3meses">
-        <input type="radio" name="plan" value="3meses" />
-        <div class="plan-fila">
-          <div class="plan-izquierda">
-            <div class="plan-radio"></div>
-            <div>
-              <div class="plan-nombre">3 meses</div>
-              <div class="plan-badge">50% OFF</div>
-            </div>
-          </div>
-          <div class="plan-precios">
-            <div class="plan-precio-actual">$44.466 COP</div>
-            <div class="plan-precio-anterior">$88.932 COP</div>
-          </div>
-        </div>
-      </label>
+      <div id="lista-planes"></div>
 
       <button class="boton boton-primario boton-quiero-plan" id="boton-quiero-plan">Quiero mi plan</button>
 
+      <div class="planes-aviso-correo" id="aviso-correo">
+        Paga con el <strong>mismo correo</strong> con el que te registraste, para que tu acceso se active solo.
+      </div>
+
       <p class="planes-nota">
-        Al continuar aceptas que se procese tu pago de forma segura por Hotmart.
-        Es un pago único por el tiempo que elijas — no es una suscripción que se renueve sola.
+        Pago único por el tiempo que elijas: <strong>no se renueva solo</strong>.<br />
+        Garantía de 7 días. Pagas de forma segura por Hotmart, con Nequi, Bancolombia, PSE o tarjeta.
       </p>
 
       <a href="inicio.html" class="planes-omitir">Seguir explorando gratis por ahora</a>
@@ -192,11 +113,25 @@
   <script src="js/supabase-client.js"></script>
   <script src="js/data.js"></script>
   <script>
-    const LINKS_PLAN = {
-      semana: 'https://pay.hotmart.com/H107809141Y?off=c9ogw9x1&checkoutMode=10',
-      mes: 'https://pay.hotmart.com/H107809141Y?off=t4naqoib&checkoutMode=10',
-      '3meses': 'https://pay.hotmart.com/H107809141Y?off=to80hb4m&checkoutMode=10',
-    };
+    // Fin real de la oferta de lanzamiento (medianoche del 30 de noviembre, hora de Colombia).
+    const FIN_OFERTA = new Date('2026-11-30T23:59:59-05:00').getTime();
+
+    const BASE_PAGO = 'https://pay.hotmart.com/H107809141Y';
+    const PLANES = [
+      {
+        id: 'mes', nombre: '1 mes', detalle: 'Para empezar a tu ritmo',
+        codigo: 'hk4czs3u', precio: 24900, normal: 34900, meses: 1,
+      },
+      {
+        id: '3meses', nombre: '3 meses', detalle: 'Trabaja todas las zonas que necesites, sin afán',
+        codigo: 'a3qdb25p', precio: 59900, normal: 79900, meses: 3, etiqueta: 'RECOMENDADO',
+      },
+      {
+        id: 'anio', nombre: '1 año', detalle: 'Todo el acceso, todo el año',
+        codigo: '1lysirjo', precio: 149900, normal: 249900, meses: 12, etiqueta: 'MEJOR VALOR',
+      },
+    ];
+    const PRECIO_MES_BASE = PLANES[0].precio;
 
     const ETIQUETAS_ZONA = {
       cuello: 'tu cuello', cabeza: 'tu cabeza', mandibula: 'tu mandíbula', hombros: 'tus hombros',
@@ -205,46 +140,91 @@
       pies: 'tus pies', brazos: 'tus brazos', antebrazos: 'tus antebrazos', manos: 'tus manos', abdomen: 'tu abdomen',
     };
 
-    let planSeleccionado = 'mes';
+    const formatoPesos = (n) => '$' + Math.round(n).toLocaleString('es-CO').replace(/,/g, '.');
+    const ofertaActiva = () => Date.now() < FIN_OFERTA;
 
-    document.querySelectorAll('.plan-tarjeta').forEach((tarjeta) => {
-      tarjeta.addEventListener('click', () => {
-        document.querySelectorAll('.plan-tarjeta').forEach(t => t.classList.remove('seleccionada'));
-        tarjeta.classList.add('seleccionada');
-        planSeleccionado = tarjeta.querySelector('input').value;
+    let planSeleccionado = '3meses';
+    let correoUsuario = '';
+
+    function dibujarPlanes() {
+      const activa = ofertaActiva();
+      const contenedor = document.getElementById('lista-planes');
+      contenedor.innerHTML = PLANES.map((p) => {
+        const porMes = p.precio / p.meses;
+        const ahorro = p.meses * PRECIO_MES_BASE - p.precio;
+        const descuento = Math.round((1 - p.precio / p.normal) * 100);
+        const lineaAhorro = p.meses > 1
+          ? `<span>Equivale a ${formatoPesos(Math.round(porMes / 100) * 100)} al mes</span><span class="ahorro">Ahorras ${formatoPesos(ahorro)}</span>`
+          : `<span>Pago único</span>`;
+        return `
+          <label class="plan-tarjeta ${p.id === planSeleccionado ? 'seleccionada' : ''}" data-plan="${p.id}">
+            ${p.etiqueta ? `<span class="plan-etiqueta">${p.etiqueta}</span>` : ''}
+            <input type="radio" name="plan" value="${p.id}" ${p.id === planSeleccionado ? 'checked' : ''} />
+            <div class="plan-fila">
+              <div class="plan-izquierda">
+                <div class="plan-radio"></div>
+                <div>
+                  <div class="plan-nombre">${p.nombre}</div>
+                  <div class="plan-detalle">${p.detalle}</div>
+                  ${activa ? `<div class="plan-badge">${descuento}% menos</div>` : ''}
+                </div>
+              </div>
+              <div class="plan-precios">
+                <div class="plan-precio-actual">${formatoPesos(p.precio)}</div>
+                ${activa ? `<div class="plan-precio-anterior">${formatoPesos(p.normal)}</div>` : ''}
+              </div>
+            </div>
+            <div class="plan-extra">${lineaAhorro}</div>
+          </label>`;
+      }).join('');
+
+      contenedor.querySelectorAll('.plan-tarjeta').forEach((tarjeta) => {
+        tarjeta.addEventListener('click', () => {
+          planSeleccionado = tarjeta.dataset.plan;
+          contenedor.querySelectorAll('.plan-tarjeta').forEach((t) => t.classList.toggle('seleccionada', t === tarjeta));
+        });
       });
-    });
+    }
+
+    function enlaceDePago(plan) {
+      let url = `${BASE_PAGO}?off=${plan.codigo}&checkoutMode=10`;
+      if (correoUsuario) url += `&email=${encodeURIComponent(correoUsuario)}`;
+      return url;
+    }
 
     document.getElementById('boton-quiero-plan').addEventListener('click', () => {
-      window.open(LINKS_PLAN[planSeleccionado], '_blank');
+      const plan = PLANES.find((p) => p.id === planSeleccionado);
+      window.open(enlaceDePago(plan), '_blank');
     });
 
-    // Cronómetro de 10 minutos (se reinicia cada vez que se entra a esta pantalla).
-    (function iniciarCronometro() {
-      let segundosRestantes = 10 * 60;
-      const el = document.getElementById('reloj-cupon');
+    function iniciarCuentaRegresiva() {
+      const caja = document.getElementById('caja-oferta');
+      const reloj = document.getElementById('reloj-oferta');
       const actualizar = () => {
-        const m = Math.floor(segundosRestantes / 60);
-        const s = segundosRestantes % 60;
-        el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-      };
-      actualizar();
-      setInterval(() => {
-        if (segundosRestantes > 0) {
-          segundosRestantes--;
-          actualizar();
+        const restante = FIN_OFERTA - Date.now();
+        if (restante <= 0) {
+          caja.style.display = 'none';
+          dibujarPlanes();
+          return false;
         }
-      }, 1000);
-    })();
+        const d = Math.floor(restante / 86400000);
+        const h = Math.floor((restante % 86400000) / 3600000);
+        const m = Math.floor((restante % 3600000) / 60000);
+        const s = Math.floor((restante % 60000) / 1000);
+        reloj.textContent = `${d} d  ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        return true;
+      };
+      if (!actualizar()) return;
+      const id = setInterval(() => { if (!actualizar()) clearInterval(id); }, 1000);
+    }
+
+    dibujarPlanes();
+    iniciarCuentaRegresiva();
 
     (async function personalizar() {
       const usuario = await obtenerUsuarioActual();
       if (!usuario) return;
-
-      const primerNombre = (usuario.nombre || '').trim().split(' ')[0];
-      const hoy = new Date();
-      const codigo = `${primerNombre || 'Mary'}_${hoy.getDate()}${['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][hoy.getMonth()]}${hoy.getFullYear()}`;
-      document.getElementById('codigo-cupon').textContent = codigo;
+      correoUsuario = usuario.email || '';
 
       const resp = await obtenerRespuestasQuiz(usuario.id);
       const zonas = resp && resp.zonas_dolor;
