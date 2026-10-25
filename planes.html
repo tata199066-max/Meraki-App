@@ -88,8 +88,8 @@
       </div>
 
       <div class="oferta-caja" id="caja-oferta">
-        <div class="oferta-texto">Precio de lanzamiento hasta el 15 de noviembre</div>
-        <div class="oferta-texto" style="font-weight:600; margin-top:4px;">Después sube de precio. Asegura el tuyo hoy.</div>
+        <div class="oferta-texto" id="oferta-linea1">Precio de lanzamiento: solo las primeras 100 personas, hasta el 15 de noviembre</div>
+        <div class="oferta-texto" id="oferta-linea2" style="font-weight:600; margin-top:4px;">Después sube de precio. Asegura el tuyo hoy.</div>
         <div class="oferta-reloj" id="reloj-oferta">--</div>
       </div>
 
@@ -118,6 +118,10 @@
     const FIN_OFERTA = new Date('2026-11-15T23:59:59-05:00').getTime();
     // El reloj solo aparece cuando faltan 7 días o menos.
     const DIAS_PARA_MOSTRAR_RELOJ = 7;
+    // La oferta termina el 15 de nov o cuando se agoten estos cupos, lo que pase primero.
+    // Las compras de lanzamiento las cuenta el webhook en la tabla compras_lanzamiento.
+    const TOTAL_CUPOS = 100;
+    let cuposAgotados = false;
 
     const BASE_PAGO = 'https://pay.hotmart.com/H107809141Y';
     const PLANES = [
@@ -144,7 +148,7 @@
     };
 
     const formatoPesos = (n) => '$' + Math.round(n).toLocaleString('es-CO').replace(/,/g, '.');
-    const ofertaActiva = () => Date.now() < FIN_OFERTA;
+    const ofertaActiva = () => Date.now() < FIN_OFERTA && !cuposAgotados;
 
     let planSeleccionado = '3meses';
     let correoUsuario = '';
@@ -224,6 +228,21 @@
 
     dibujarPlanes();
     iniciarCuentaRegresiva();
+
+    (async function cargarCupos() {
+      try {
+        const { data, error } = await supabase.rpc('cupos_lanzamiento');
+        if (error || typeof data !== 'number') return;
+        if (data >= TOTAL_CUPOS) {
+          cuposAgotados = true;
+          document.getElementById('caja-oferta').style.display = 'none';
+        } else if (data > 0) {
+          document.getElementById('oferta-linea2').textContent =
+            `Quedan ${TOTAL_CUPOS - data} de ${TOTAL_CUPOS} cupos. Después sube de precio.`;
+        }
+        dibujarPlanes();
+      } catch (e) { /* si no se puede leer el contador, se muestra la oferta por fecha */ }
+    })();
 
     (async function personalizar() {
       const usuario = await obtenerUsuarioActual();
