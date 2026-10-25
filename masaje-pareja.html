@@ -105,6 +105,7 @@
       const esUltimo = pasoIndiceMP === masajePareja.pasos.length - 1;
       document.getElementById('bloque-tecnica-mp').innerHTML = `
         <div class="paso-contador">Paso ${pasoIndiceMP + 1} de ${masajePareja.pasos.length}</div>
+        ${paso.imagen ? `<img src="${paso.imagen}" alt="${paso.titulo}" class="foto-tecnica" />` : ''}
         <h3>${paso.titulo}</h3>
         <p>${paso.detalle}</p>
         <div class="temporizador" id="texto-temporizador-mp">${formatearTiempo(segundosRestantesMP || paso.segundos)}</div>

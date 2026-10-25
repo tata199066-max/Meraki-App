@@ -17,10 +17,10 @@ const MASAJES_PAREJA = [
     posturaDa: 'De pie o de rodillas detrás de quien recibe, con ambas manos libres para trabajar el cuello y los hombros.',
     presion: 'Firme pero cómoda — pregunta siempre "¿así está bien?" antes de subir la intensidad.',
     pasos: [
-      { titulo: 'Calentamiento', detalle: 'Con las palmas de ambas manos, desliza desde la base del cuello hacia los hombros, varias veces, sin presionar fuerte todavía.', segundos: 25 },
-      { titulo: 'Amasar los hombros', detalle: 'Con los dedos y el pulgar, toma el músculo del hombro entre tus dedos y amasa suave, de adentro hacia afuera, en ambos lados.', segundos: 40 },
-      { titulo: 'Presión a los lados del cuello', detalle: 'Con los pulgares, presiona suave y sostenido a los lados de la columna cervical (nunca sobre el hueso), contando unos segundos y soltando despacio.', segundos: 30 },
-      { titulo: 'Cierre', detalle: 'Apoya las manos quietas sobre los hombros de quien recibe unos segundos, respirando juntas.', segundos: 20 },
+      { titulo: 'Calentamiento', detalle: 'Con las palmas de ambas manos, desliza desde la base del cuello hacia los hombros, varias veces, sin presionar fuerte todavía.', segundos: 25, imagen: 'images/pareja-cuello-paso1.jpg' },
+      { titulo: 'Amasar los hombros', detalle: 'Con los dedos y el pulgar, toma el músculo del hombro entre tus dedos y amasa suave, de adentro hacia afuera, en ambos lados.', segundos: 40, imagen: 'images/pareja-cuello-paso2.jpg' },
+      { titulo: 'Presión a los lados del cuello', detalle: 'Con los pulgares, presiona suave y sostenido a los lados de la columna cervical (nunca sobre el hueso), contando unos segundos y soltando despacio.', segundos: 30, imagen: 'images/pareja-cuello-paso3.jpg' },
+      { titulo: 'Cierre', detalle: 'Apoya las manos quietas sobre los hombros de quien recibe unos segundos, respirando juntas.', segundos: 20, imagen: 'images/pareja-cuello-paso4.jpg' },
     ],
   },
   {
