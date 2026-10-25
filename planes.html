@@ -88,7 +88,8 @@
       </div>
 
       <div class="oferta-caja" id="caja-oferta">
-        <div class="oferta-texto">Precio de lanzamiento: termina el 30 de noviembre</div>
+        <div class="oferta-texto">Precio de lanzamiento hasta el 15 de noviembre</div>
+        <div class="oferta-texto" style="font-weight:600; margin-top:4px;">Después sube de precio. Asegura el tuyo hoy.</div>
         <div class="oferta-reloj" id="reloj-oferta">--</div>
       </div>
 
@@ -113,8 +114,10 @@
   <script src="js/supabase-client.js"></script>
   <script src="js/data.js"></script>
   <script>
-    // Fin real de la oferta de lanzamiento (medianoche del 30 de noviembre, hora de Colombia).
-    const FIN_OFERTA = new Date('2026-11-30T23:59:59-05:00').getTime();
+    // Fin real de la oferta de lanzamiento (medianoche del 15 de noviembre, hora de Colombia).
+    const FIN_OFERTA = new Date('2026-11-15T23:59:59-05:00').getTime();
+    // El reloj solo aparece cuando faltan 7 días o menos.
+    const DIAS_PARA_MOSTRAR_RELOJ = 7;
 
     const BASE_PAGO = 'https://pay.hotmart.com/H107809141Y';
     const PLANES = [
@@ -207,6 +210,7 @@
           dibujarPlanes();
           return false;
         }
+        reloj.style.display = restante > DIAS_PARA_MOSTRAR_RELOJ * 86400000 ? 'none' : 'inline-block';
         const d = Math.floor(restante / 86400000);
         const h = Math.floor((restante % 86400000) / 3600000);
         const m = Math.floor((restante % 3600000) / 60000);
