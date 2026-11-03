@@ -70,6 +70,15 @@
         </div>
       </div>
 
+      <div class="tarjeta" id="tarjeta-como-funciona" hidden>
+        <h3 style="margin-top:0;">Así funciona Meraki, en 3 pasos</h3>
+        <p style="margin-bottom:6px;"><strong>1. Escoge una zona.</strong> Toca "Empezar ahora" en tu recomendación, o entra a "Automasaje" y elige la parte del cuerpo que quieres aliviar.</p>
+        <p style="margin-bottom:6px;"><strong>2. Sigue cada paso.</strong> Lee lo que dice, mira la imagen y toca "Iniciar". El cronómetro cuenta el tiempo de ese paso. Cuando suene, toca "Siguiente paso".</p>
+        <p style="margin-bottom:10px;"><strong>3. Cuéntanos cómo te sentiste.</strong> Al terminar, la app te pregunta y te sugiere la siguiente zona.</p>
+        <p class="texto-suave" style="margin-bottom:10px;">Si no entiendes una palabra o no sabes dónde poner la mano o la pelota, lee el paso completo: dice paso a paso dónde va. Si algo duele fuerte, para.</p>
+        <button class="boton boton-secundario" id="boton-entendido">Entendido</button>
+      </div>
+
       <h2 style="margin-top:24px;">Tu recomendación de hoy</h2>
       <div class="tarjeta" id="tarjeta-recomendacion">
         <!-- se llena por JS -->
@@ -279,6 +288,18 @@
       await cerrarSesion();
       window.location.href = 'index.html';
     });
+
+    // Tarjeta "Así funciona Meraki": se muestra hasta que la persona toca "Entendido".
+    (function comoFunciona() {
+      const tarjeta = document.getElementById('tarjeta-como-funciona');
+      let visto = false;
+      try { visto = localStorage.getItem('meraki_como_funciona_visto') === '1'; } catch (e) {}
+      tarjeta.hidden = visto;
+      document.getElementById('boton-entendido').addEventListener('click', () => {
+        tarjeta.hidden = true;
+        try { localStorage.setItem('meraki_como_funciona_visto', '1'); } catch (e) {}
+      });
+    })();
 
     iniciarPantalla();
   </script>

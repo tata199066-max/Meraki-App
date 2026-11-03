@@ -105,7 +105,7 @@ function renderTarjetasInfo() {
       <p style="margin-bottom:0;">${zona.porQue}</p>
     </div>
     <div class="tarjeta info-tarjeta">
-      <span class="etiqueta-info">Dato clínico</span>
+      <span class="etiqueta-info">Lo que conviene saber</span>
       <p style="margin-bottom:0;">${zona.datoClinico}</p>
     </div>
     <div class="tarjeta info-tarjeta evitar">
@@ -198,6 +198,7 @@ async function renderPrincipal() {
         </div>
         <h3>${paso.titulo}</h3>
         <p>${paso.detalle}</p>
+        <p class="texto-suave" style="font-size:13px;">Lee el paso, mira la imagen y toca Iniciar. Cuando suene el cronómetro, toca Siguiente paso.</p>
         <div class="tarjeta-guia-tecnica">${GUIA_TECNICA[tipoMovimiento]}</div>
         <div class="temporizador" id="texto-temporizador">${formatearTiempo(segundosRestantes || paso.segundos)}</div>
         <div class="controles-paso" style="margin-bottom:10px;">

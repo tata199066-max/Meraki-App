@@ -25,7 +25,7 @@ const MASAJES_PAREJA = [
   },
   {
     id: 'espalda_alta_pareja',
-    nombre: 'Espalda alta / escápulas',
+    nombre: 'Espalda alta (entre los omóplatos)',
     nivel: 'Básico',
     premium: true,
     tiempo: '10 minutos',
