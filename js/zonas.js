@@ -234,9 +234,9 @@ const FOTOS_PASOS = {
   // piriforme: fotos del punto del centro (con pelota / sin pelota), la posición
   // y el calentamiento. Los niveles 3 y 4 siguen con el dibujo hasta tener fotos.
   piriforme: {
-    1: { 1: 'images/piriforme-calentamiento.jpg', 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg', 4: 'images/piriforme-centro.jpg' },
-    2: { 1: 'images/piriforme-calentamiento.jpg', 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg' },
-    5: { 1: 'images/piriforme-calentamiento.jpg', 2: 'images/piriforme-centro.jpg' },
+    1: { 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg', 4: 'images/piriforme-centro.jpg' },
+    2: { 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg' },
+    5: { 2: 'images/piriforme-centro.jpg' },
   },
 };
 
