@@ -50,6 +50,12 @@ function puedeVerZona() {
   return !zona.premium || tieneAccesoPremium();
 }
 
+// Foto del paso (si la zona la tiene en FOTOS_PASOS); si no, null y se usa el dibujo.
+function fotoDelPaso(numeroNivel, numeroPaso) {
+  const porNivel = FOTOS_PASOS[zona.id] && FOTOS_PASOS[zona.id][numeroNivel];
+  return (porNivel && porNivel[numeroPaso]) || null;
+}
+
 async function render() {
   if (!zona) {
     contenedor.innerHTML = '<p>No encontramos esta zona.</p>';
@@ -100,6 +106,7 @@ function renderTarjetasInfo() {
       ${etiqueta}
     </div>
     ${avisoPremium}
+    ${zona.notaFotos ? `<div class="mensaje-aviso">${zona.notaFotos}</div>` : ''}
     <div class="tarjeta info-tarjeta">
       <span class="etiqueta-info">Por qué se tensiona</span>
       <p style="margin-bottom:0;">${zona.porQue}</p>
@@ -192,10 +199,12 @@ async function renderPrincipal() {
       <h2 style="margin-top:8px;">${nivel.titulo}${nivel.avanzado ? ' <span class="etiqueta etiqueta-premium">Avanzado</span>' : ''}</h2>
       <div class="tarjeta">
         <div class="paso-contador">Paso ${pasoIndice + 1} de ${pasosActuales.length}</div>
-        <div class="diagrama-unico">
+        ${fotoDelPaso(nivel.numero, pasoIndice + 1)
+          ? `<img src="${fotoDelPaso(nivel.numero, pasoIndice + 1)}" alt="${paso.titulo}" class="foto-tecnica foto-paso" />`
+          : `<div class="diagrama-unico">
           <div class="diagrama-titulo">${zona.nombre}</div>
           ${generarDiagramaCompleto(zona.id, nivel.numero, tipoMovimiento)}
-        </div>
+        </div>`}
         <h3>${paso.titulo}</h3>
         <p>${paso.detalle}</p>
         <p class="texto-suave" style="font-size:13px;">Lee el paso, mira la imagen y toca Iniciar. Cuando suene el cronómetro, toca Siguiente paso.</p>

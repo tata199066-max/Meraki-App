@@ -134,6 +134,7 @@ const ZONAS = [
     porQue: 'El piriforme es un músculo pequeño y profundo del glúteo, justo al lado de un nervio grande que baja por la pierna. Pasar muchas horas sentada, cruzar la pierna seguido o el estrés acumulado en la cadera lo ponen duro, y eso puede dar una molestia que baja por el glúteo y la pierna.',
     datoClinico: 'Esa molestia en el glúteo y la pierna se parece a la de la ciática, y mucha gente la confunde. Por eso se le conoce como "falsa ciática". Si el dolor es muy fuerte o no mejora, consulta a un profesional.',
     evitarSi: 'Dolor punzante y agudo al presionar (bajar la intensidad de inmediato), hernia discal sin autorización médica.',
+    notaFotos: 'Esta técnica se hace con una pelota de tenis: con la mano sola no se alcanza el músculo. Cada paso trae su foto. Si te duele demasiado con la pierna cruzada, bájala y siéntate igual sobre la pelota.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Punto del centro del glúteo' },
       { numero: 2, diaOffset: 3, titulo: 'Punto del centro, con pulsos' },
@@ -225,6 +226,19 @@ const ZONAS = [
     ],
   },
 ];
+
+/* Fotos paso a paso para las zonas más difíciles de explicar. Clave: id de la
+   zona -> número de nivel -> número de paso -> foto. Si un paso no tiene foto
+   aquí, se sigue mostrando el dibujo de siempre. */
+const FOTOS_PASOS = {
+  // piriforme: fotos del punto del centro (con pelota / sin pelota), la posición
+  // y el calentamiento. Los niveles 3 y 4 siguen con el dibujo hasta tener fotos.
+  piriforme: {
+    1: { 1: 'images/piriforme-calentamiento.jpg', 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg', 4: 'images/piriforme-centro.jpg' },
+    2: { 1: 'images/piriforme-calentamiento.jpg', 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg' },
+    5: { 1: 'images/piriforme-calentamiento.jpg', 2: 'images/piriforme-centro.jpg' },
+  },
+};
 
 const BLOQUES = [
   'Cuello y cabeza',
