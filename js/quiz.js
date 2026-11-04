@@ -41,10 +41,10 @@ const OPCIONES_CONDICIONES = [
 
 const PASOS_QUIZ = [
   {
-    id: 'edad', tipo: 'numero', pregunta: '¿Cuántos años tienes?', placeholder: 'Edad', obligatorio: true,
+    ocultar: true, id: 'edad', tipo: 'numero', pregunta: '¿Cuántos años tienes?', placeholder: 'Edad', obligatorio: true,
   },
   {
-    id: 'sexo', tipo: 'radio', pregunta: '¿Cuál es tu sexo?', obligatorio: true,
+    ocultar: true, id: 'sexo', tipo: 'radio', pregunta: '¿Cuál es tu sexo?', obligatorio: true,
     opciones: [
       { valor: 'hombre', texto: 'Hombre' },
       { valor: 'mujer', texto: 'Mujer' },
@@ -52,10 +52,10 @@ const PASOS_QUIZ = [
     ],
   },
   {
-    id: 'estatura_peso', tipo: 'estatura_peso', pregunta: 'Estatura y peso (opcional)', obligatorio: false,
+    ocultar: true, id: 'estatura_peso', tipo: 'estatura_peso', pregunta: 'Estatura y peso (opcional)', obligatorio: false,
   },
   {
-    id: 'ocupacion', tipo: 'radio_otro', pregunta: '¿A qué te dedicas / cómo pasas la mayor parte del día?', obligatorio: true,
+    ocultar: true, id: 'ocupacion', tipo: 'radio_otro', pregunta: '¿A qué te dedicas / cómo pasas la mayor parte del día?', obligatorio: true,
     opciones: [
       { valor: 'oficina', texto: 'Sentado en oficina/computadora' },
       { valor: 'de_pie', texto: 'De pie muchas horas' },
@@ -70,7 +70,7 @@ const PASOS_QUIZ = [
     opciones: OPCIONES_ZONAS_DOLOR,
   },
   {
-    id: 'tiempo_molestia', tipo: 'radio', pregunta: '¿Hace cuánto tienes esta molestia?', obligatorio: true,
+    ocultar: true, id: 'tiempo_molestia', tipo: 'radio', pregunta: '¿Hace cuánto tienes esta molestia?', obligatorio: true,
     opciones: [
       { valor: 'menos_semana', texto: 'Menos de una semana' },
       { valor: 'unas_semanas', texto: 'Unas semanas' },
@@ -82,7 +82,7 @@ const PASOS_QUIZ = [
     id: 'intensidad', tipo: 'escala', pregunta: 'En una escala de 1 a 10, ¿qué tan fuerte es la molestia que tienes?', obligatorio: true,
   },
   {
-    id: 'diagnostico', tipo: 'radio_especificar', pregunta: '¿Alguna vez un profesional de salud te diagnosticó algo relacionado con este dolor?', obligatorio: true,
+    ocultar: true, id: 'diagnostico', tipo: 'radio_especificar', pregunta: '¿Alguna vez un profesional de salud te diagnosticó algo relacionado con este dolor?', obligatorio: true,
     opciones: [
       { valor: 'si', texto: 'Sí' },
       { valor: 'no', texto: 'No' },
@@ -102,14 +102,14 @@ const PASOS_QUIZ = [
     mostrarSi: (r) => Array.isArray(r.condiciones) && r.condiciones.length > 0 && !r.condiciones.includes('ninguna'),
   },
   {
-    id: 'duracion_preferida', tipo: 'radio', pregunta: '¿Prefieres rutinas cortas o sesiones más largas?', obligatorio: true,
+    ocultar: true, id: 'duracion_preferida', tipo: 'radio', pregunta: '¿Prefieres rutinas cortas o sesiones más largas?', obligatorio: true,
     opciones: [
       { valor: 'cortas', texto: 'Rutinas cortas (5 min)' },
       { valor: 'largas', texto: 'Sesiones más largas (15-20 min)' },
     ],
   },
   {
-    id: 'frecuencia', tipo: 'radio', pregunta: '¿Con qué frecuencia te gustaría practicar?', obligatorio: true,
+    ocultar: true, id: 'frecuencia', tipo: 'radio', pregunta: '¿Con qué frecuencia te gustaría practicar?', obligatorio: true,
     opciones: [
       { valor: 'todos_los_dias', texto: 'Todos los días' },
       { valor: 'dia_por_medio', texto: 'Día por medio' },
@@ -136,7 +136,9 @@ let indicePaso = 0;
 let respuestas = {};
 
 function pasosVisibles() {
-  return PASOS_QUIZ.filter(p => !p.mostrarSi || p.mostrarSi(respuestas));
+  // Las preguntas marcadas con "ocultar" no se muestran (cuestionario corto para que la
+  // gente lo termine); se dejan aquí por si se quieren volver a activar.
+  return PASOS_QUIZ.filter(p => !p.ocultar && (!p.mostrarSi || p.mostrarSi(respuestas)));
 }
 
 function pasoActual() {

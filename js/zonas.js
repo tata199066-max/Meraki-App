@@ -67,7 +67,7 @@ const ZONAS = [
     evitarSi: 'Chasquidos o bloqueo al abrir la boca, dolor dental agudo, cirugía dental reciente.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Mejilla (parte de arriba)' },
-      { numero: 2, diaOffset: 3, titulo: 'Mejilla, presión con pulsos' },
+      { numero: 2, diaOffset: 3, titulo: 'Mejilla, presionando y soltando' },
       { numero: 3, diaOffset: 7, titulo: 'Esquina de la mandíbula', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Esquina de la mandíbula, con movimiento', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (mejilla, mandíbula y sien)', esRutinaCompleta: true },
@@ -121,7 +121,7 @@ const ZONAS = [
     evitarSi: 'Dolor que baja como un rayo hacia la pierna (puede ser un nervio): ahí no se automasajea, primero se consulta.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'A los lados de la columna' },
-      { numero: 2, diaOffset: 3, titulo: 'A los lados de la columna, con pulsos' },
+      { numero: 2, diaOffset: 3, titulo: 'A los lados de la columna, presionando y soltando' },
       { numero: 3, diaOffset: 7, titulo: 'Punto cerca de la cadera', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Punto cerca de la cadera, con movimiento', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (ambos lados)', esRutinaCompleta: true },
@@ -136,11 +136,11 @@ const ZONAS = [
     evitarSi: 'Dolor punzante y agudo al presionar (bajar la intensidad de inmediato), hernia discal sin autorización médica.',
     notaFotos: 'Esta técnica se hace con una pelota de tenis: con la mano sola no se alcanza el músculo. Cada paso trae su foto. Si te duele demasiado con la pierna cruzada, bájala y siéntate igual sobre la pelota.',
     niveles: [
-      { numero: 1, diaOffset: 0, titulo: 'Punto del centro del glúteo' },
-      { numero: 2, diaOffset: 3, titulo: 'Punto del centro, con pulsos' },
+      { numero: 1, diaOffset: 0, titulo: 'Soltar: poco peso y luego quieta' },
+      { numero: 2, diaOffset: 3, titulo: 'Profundizar: todo el peso, presiona y suelta' },
       { numero: 3, diaOffset: 7, titulo: 'Punto de arriba, hacia la espalda baja', preguntaExtra: true },
-      { numero: 4, diaOffset: 14, titulo: 'Punto de abajo, hacia la cadera', avanzado: true, preguntaExtra: true },
-      { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos)', esRutinaCompleta: true },
+      { numero: 4, diaOffset: 14, titulo: 'Punto de abajo, abriendo las rodillas', avanzado: true, preguntaExtra: true },
+      { numero: 5, diaOffset: 21, titulo: 'Rutina completa (3 puntos y recorrido)', esRutinaCompleta: true },
     ],
   },
 
@@ -193,7 +193,7 @@ const ZONAS = [
     evitarSi: 'Hormigueo o adormecimiento hacia los dedos, hinchazón marcada en la muñeca.',
     niveles: [
       { numero: 1, diaOffset: 0, titulo: 'Palma de la mano' },
-      { numero: 2, diaOffset: 3, titulo: 'Palma, con pulsos' },
+      { numero: 2, diaOffset: 3, titulo: 'Palma, presionando y soltando' },
       { numero: 3, diaOffset: 7, titulo: 'Base del pulgar', preguntaExtra: true },
       { numero: 4, diaOffset: 14, titulo: 'Entre los huesos de los dedos', avanzado: true, preguntaExtra: true },
       { numero: 5, diaOffset: 21, titulo: 'Rutina completa (mano y muñeca)', esRutinaCompleta: true },
@@ -234,10 +234,11 @@ const FOTOS_PASOS = {
   // piriforme: fotos del punto del centro (con pelota / sin pelota), la posición
   // y el calentamiento. Los niveles 3 y 4 siguen con el dibujo hasta tener fotos.
   piriforme: {
-    1: { 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg', 4: 'images/piriforme-centro.jpg' },
-    2: { 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg' },
-    3: { 2: 'images/piriforme-nivel3.jpg', 3: 'images/piriforme-nivel3.jpg' },
-    5: { 2: 'images/piriforme-centro.jpg' },
+    1: { 2: 'images/piriforme-n1p2.jpg', 3: 'images/piriforme-n1p3.jpg', 4: 'images/piriforme-n1p4.jpg' },
+    2: { 2: 'images/piriforme-n2p2.jpg', 3: 'images/piriforme-n2p3.jpg', 4: 'images/piriforme-n2p4.jpg' },
+    3: { 2: 'images/piriforme-n3.jpg', 3: 'images/piriforme-n3.jpg' },
+    4: { 2: 'images/piriforme-n4p2.jpg', 3: 'images/piriforme-n4p3.jpg' },
+    5: { 2: 'images/piriforme-n1p4.jpg', 3: 'images/piriforme-n3.jpg', 4: 'images/piriforme-n4p3.jpg', 5: 'images/piriforme-n5.jpg' },
   },
 };
 

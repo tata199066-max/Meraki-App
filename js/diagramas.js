@@ -394,7 +394,7 @@ function generarDiagramaCompleto(zonaId, numeroNivel, tipoMovimiento) {
 function inferirTipoMovimiento(tituloPaso) {
   const t = tituloPaso.toLowerCase();
   if (t.includes('círculo') || t.includes('circular')) return 'circular';
-  if (t.includes('desliz') || t.includes('calentamiento') || t.includes('ordeñ')) return 'deslizar';
+  if (t.includes('desliz') || t.includes('calentamiento') || t.includes('calienta') || t.includes('ordeñ')) return 'deslizar';
   if (t.includes('sosten') || t.includes('respir') || t.includes('cierre') || t.includes('estiramiento')) return 'sostener';
   return 'presionar';
 }
