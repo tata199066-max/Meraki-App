@@ -236,6 +236,7 @@ const FOTOS_PASOS = {
   piriforme: {
     1: { 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg', 4: 'images/piriforme-centro.jpg' },
     2: { 2: 'images/piriforme-posicion.jpg', 3: 'images/piriforme-centro.jpg' },
+    3: { 2: 'images/piriforme-nivel3.jpg', 3: 'images/piriforme-nivel3.jpg' },
     5: { 2: 'images/piriforme-centro.jpg' },
   },
 };
